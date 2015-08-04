@@ -3,11 +3,16 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Dromeland test</title>
-		<script src="js/phaser.min.js"></script>
-		<script src="js/loadstate.js"></script>
 	</head>
 	<body>
 		<div id="game"></div>
+		<script src="js/phaser.min.js"></script>
+        <script>
+var GAME_WIDTH = 640;
+var GAME_HEIGHT = 480;
+var game = new Phaser.Game(GAME_WIDTH, GAME_HEIGHT, 'game', Phaser.AUTO);
+        </script>
+		<script src="js/loadstate.js"></script>
 		<script src="js/trainstate.js"></script>
 		<script src="js/dromeland.js"></script>
 	</body>

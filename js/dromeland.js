@@ -1,5 +1,4 @@
 var currentLevel = 0;
-var game = new Phaser.Game(800, 600, 'game', Phaser.AUTO);
 
 game.state.add('load', loadState);
 game.state.add('train', trainState);
