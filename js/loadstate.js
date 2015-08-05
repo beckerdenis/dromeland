@@ -5,9 +5,9 @@ var loadState = {
 				{ font : '30px serif', fill : '#ffffff' });
 		game.load.spritesheet('player', 'img/bonhomme.png', 48, 64);
 		// Niveau 1 : la gare
-		game.load.image('c01_background', 'img/c01_background.png');
-		game.load.spritesheet('c01_train_left', 'img/c01_animated_train_go_left.png', 400, 125);
-		game.load.spritesheet('c01_train_right', 'img/c01_animated_train_go_right.png', 400, 125);
+		game.load.image('c01_background_part1', 'img/c01_background_part1.png');
+		game.load.image('c01_background_part2', 'img/c01_background_part2.png');
+		game.load.spritesheet('c01_train', 'img/c01_train.png', 370, 124, 6);
 		game.load.spritesheet('c01_tickets', 'img/c01_tickets.png', 45, 35);
 	},
 

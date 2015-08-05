@@ -1,15 +1,34 @@
 var trainState = {
 
+    rightDir : 0,
+
+    leftDir : 1,
+
 	playerSpeed : 200,
 
-	trainSpeed : 1000,
+    trainOriginFrame : [0, 3],
+
+    trainOriginX : [-370, 640],
+
+	trainOriginY : [256, 322, 388],
+
+	trainArray : [null, null, null],
 
 	// utilities
 
-	randomTime : function() {
-		var min = 2; // min 1/2 sec
-		var max = 8; // max 2 sec
-		return Phaser.Timer.QUARTER * Math.floor(Math.random() * (max - min + 1)) + min;
+    randomDirection : function() {
+        if (Math.random() < 0.5) {
+            return this.leftDir;
+        }
+        return this.rightDir;
+    },
+
+	randomTime : function(minQs, maxQs) {
+		return Phaser.Timer.QUARTER * this.random(minQs, maxQs);
+	},
+
+	random : function(min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
 	},
 
 	// collision callbacks
@@ -22,85 +41,105 @@ var trainState = {
 		this.player.kill();
 	},
 
-	// pop the trains regularly
+	// create a new train
 
 	popTrain : function(trainLine, direction, speed) {
-		if (direction == 'left') {
-			this.trains[trainLine].body.moveLeft(speed);
-		} else {
-			this.trains[trainLine].body.moveRight(speed);
-		}
+        var originFrame = this.trainOriginFrame[direction];
+		var train = this.mainGroup.create(this.trainOriginX[direction], this.trainOriginY[trainLine], 'c01_train', originFrame);
+        train.animations.add('move', [originFrame, originFrame + 2, originFrame + 1], 10, true);
+		train.animations.play('move');
+		train.lineId = trainLine;
+        train.anchor = {x : 0, y : 1};
+        this.trainArray[trainLine] = train;
+		
+        game.physics.arcade.enable(train);
+        train.body.velocity.x = (direction == this.leftDir) ? -speed : speed;
+        train.body.setSize(370, 48);
 	},
 
 	// phaser API implementation
 
 	create : function() {
-		game.add.image(0, 0, 'c01_background');
+		game.add.image(0, 140, 'c01_background_part2');
 
-		game.physics.startSystem(Phaser.Physics.P2JS);
-		game.physics.p2.setImpactEvent(true);
-
-		// player physics & sprite
-		this.player = game.add.sprite(GAME_WIDTH / 2, GAME_HEIGHT - 32, 'player');
-		this.player.animations.add('move', [1, 0], 10, true);
-		game.physics.p2.enable(this.player);
-		this.player.body.fixedRotation = true;
-		this.player.body.collideWorldBounds = true;
-		this.player.body.setZeroDamping();
-
-		// tickets physics & sprite
-		this.tickets = game.add.sprite(536, 450, 'c01_tickets');
-		this.tickets.animations.add('rotate', [0, 1, 2, 3, 2, 1], 10, true);
-		this.tickets.play('rotate');
-		game.physics.p2.enable(this.tickets);
-		this.tickets.body.onBeginContact.add(this.ticketCollect, this);
+		game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		// north bound
-		var northBound = game.add.sprite(0, 80, null);
-		game.physics.p2.enable(northBound);
-		northBound.body.fixedRotation = true;
-		northBound.body.collideWorldBounds = false;
-		northBound.body.mass = 0;
+		this.northBound = game.add.sprite(0, 0, 'c01_background_part1');
+		game.physics.arcade.enable(this.northBound);
+        this.northBound.body.immovable = true;
 
-		// trains physics & sprite & planification
-		var trainPhysicsGroup = game.physics.p2.createCollisionGroup();
-		this.trains = [
-			trainPhysicsGroup.create(-200, 200, 'c01_train_right'),
-			trainPhysicsGroup.create(840, 260, 'c01_train_left'),
-			trainPhysicsGroup.create(-200, 320, 'c01_train_right')
-		];
-		for (var i = 0; i < this.trains.length; i++) {
-			game.physics.p2.enable(this.trains[i]);
-			this.trains[i].body.fixedRotation = true;
-			this.trains[i].body.collideWorldBounds = false;
-			this.trains[i].body.onBeginContact.add(this.argh, this);
-			this.trains[i].body.setZeroDamping();
-		}
-		game.time.events.add(this.randomTime(), this.popTrain, this, 0, 'right', this.trainSpeed);
-		game.time.events.add(this.randomTime(), this.popTrain, this, 1, 'left', this.trainSpeed);
-		game.time.events.add(this.randomTime(), this.popTrain, this, 2, 'right', this.trainSpeed);
+		// main group (contains all objects that are 'z'-ordered)
+		this.mainGroup = game.add.group();
+		
+		// player physics & sprite
+		this.player = this.mainGroup.create((GAME_WIDTH - 48) / 2, GAME_HEIGHT, 'player');
+		this.player.animations.add('move', [1, 0], 10, true);
+        this.player.anchor = {x : 0, y : 1};
+		game.physics.arcade.enable(this.player);
+		this.player.body.collideWorldBounds = true;
+        this.player.body.setSize(48, 32); // player hitbox
+
+		// tickets physics & sprite
+		this.tickets = this.mainGroup.create(514, 476, 'c01_tickets');
+		this.tickets.animations.add('rotate', [0, 1, 2, 3, 2, 1], 10, true);
+		this.tickets.play('rotate');
+        this.tickets.anchor = {x : 0, y : 1};
+		game.physics.arcade.enable(this.tickets);
+        this.tickets.body.immovable = true;
+
+		// train killer sprite (offscreen)
+		// when a train hits this sprite, it is killed (= it is out of the screen)
+		this.trainKillers = game.add.group();
+		var leftTrainKiller = this.trainKillers.create(this.trainOriginX[this.rightDir] - 8, 0, null);
+		var rightTrainKiller = this.trainKillers.create(this.trainOriginX[this.leftDir] - this.trainOriginX[this.rightDir] + 8, 0, null);
+		game.physics.arcade.enable(leftTrainKiller);
+		game.physics.arcade.enable(rightTrainKiller);
+		leftTrainKiller.body.setSize(4, GAME_HEIGHT);
+		rightTrainKiller.body.setSize(4, GAME_HEIGHT);
+
+		game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 0, this.randomDirection(), this.random(200, 400));
+		game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 1, this.randomDirection(), this.random(200, 400));
+		game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 2, this.randomDirection(), this.random(200, 400));
 
 		this.cursors = game.input.keyboard.createCursorKeys();
 	},
 
 	update : function() {
-		var moving = false;
+		// make sure the objects are sorted by their 'y' position (for beautiful display)
+		this.mainGroup.sort('y', Phaser.Group.SORT_ASCENDING);
+        
+		// standard collisions
+        game.physics.arcade.collide(this.player, this.northBound);
+        game.physics.arcade.collide(this.player, this.tickets);
+        // collisions with special behaviours
+		for (var i = 0; i < this.trainArray.length; i++) {
+            game.physics.arcade.overlap(this.trainArray[i], this.player, function(train, player) {
+                player.kill();
+            }, null, this);
+			game.physics.arcade.overlap(this.trainArray[i], this.trainKillers, function(train) {
+			    game.time.events.add(this.randomTime(2, 6), this.popTrain, this, train.lineId, this.randomDirection(), this.random(200, 400));
+                train.kill();
+            }, null, this);
+		}
 
-		this.player.body.setZeroVelocity();
+        // player movement
+        var moving = false;
+		this.player.body.velocity = { x : 0, y : 0 };
 
 		if (this.cursors.down.isDown) {
-			this.player.body.moveDown(this.playerSpeed);
+			this.player.body.velocity.y = this.playerSpeed;
 			moving = true;
 		} else if (this.cursors.up.isDown) {
-			this.player.body.moveUp(this.playerSpeed);
+			this.player.body.velocity.y = -this.playerSpeed;
 			moving = true;
 		}
 
 		if (this.cursors.left.isDown) {
-			this.player.body.moveLeft(this.playerSpeed);
+			this.player.body.velocity.x = -this.playerSpeed;
 			moving = true;
 		} else if (this.cursors.right.isDown) {
-			this.player.body.moveRight(this.playerSpeed);
+			this.player.body.velocity.x = this.playerSpeed;
 			moving = true;
 		}
 
