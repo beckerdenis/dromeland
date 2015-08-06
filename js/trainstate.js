@@ -57,6 +57,17 @@ var trainState = {
         train.body.setSize(370, 48);
 	},
 
+    fixSpriteFactory : function(x, y, imgId, wHitBox /* optional */, hHitBox /* optional */) {
+        var decoration = this.mainGroup.create(x, y, imgId);
+        decoration.anchor = {x : 0, y : 1};
+        game.physics.arcade.enable(decoration);
+        decoration.body.immovable = true;
+        if (wHitBox != null && hHitBox != null) {
+            decoration.body.setSize(wHitBox, hHitBox);
+        }
+        return decoration;
+    },
+
 	// phaser API implementation
 
 	create : function() {
@@ -71,6 +82,14 @@ var trainState = {
 
 		// main group (contains all objects that are 'z'-ordered)
 		this.mainGroup = game.add.group();
+        
+        // post (for the tickets)
+        this.post = this.fixSpriteFactory(24, 450, 'c01_post', 15, 17);
+
+        // benches (for beautifulity)
+        this.bench1 = this.fixSpriteFactory(120, 464, 'c01_bench', 65, 15);
+        this.bench2 = this.fixSpriteFactory(450, 464, 'c01_bench', 65, 15);
+        this.bench3 = this.fixSpriteFactory(550, 464, 'c01_bench', 65, 15);
 		
 		// player physics & sprite
 		this.player = this.mainGroup.create((GAME_WIDTH - 48) / 2, GAME_HEIGHT, 'player');
@@ -81,12 +100,9 @@ var trainState = {
         this.player.body.setSize(48, 32); // player hitbox
 
 		// tickets physics & sprite
-		this.tickets = this.mainGroup.create(514, 476, 'c01_tickets');
+        this.tickets = this.fixSpriteFactory(514, 476, 'c01_tickets');
 		this.tickets.animations.add('rotate', [0, 1, 2, 3, 2, 1], 10, true);
 		this.tickets.play('rotate');
-        this.tickets.anchor = {x : 0, y : 1};
-		game.physics.arcade.enable(this.tickets);
-        this.tickets.body.immovable = true;
 
 		// train killer sprite (offscreen)
 		// when a train hits this sprite, it is killed (= it is out of the screen)
