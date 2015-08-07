@@ -36,84 +36,7 @@ var trainState = {
     },
 
     randomTime : function(minQs, maxQs) {
-        return Phaser.Timer.QUARTER * this.random(minQs, maxQs);
-    },
-
-    random : function(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    },
-
-    drawWindow : function(g, x, y, w, h) {
-        // g = graphics object
-        g.lineStyle(4, 0x000000, 0.9);
-        g.beginFill(0xddddff, 0.9);
-        g.drawRoundedRect(x, y, w, h, 4);
-        g.endFill();
-        return {
-            xCoord : x,
-            yCoord : y,
-            width : w,
-            height : h,
-            setText : function(text) {
-                if (this.text != null) {
-                    this.text.kill();
-                }
-                this.text = game.add.text(this.xCoord, this.yCoord, text, { font: "18px Arial", fill: "black", align: "center", boundsAlignH: "center", boundsAlignV: "middle" });
-                this.text.setTextBounds(this.xCoord, this.yCoord, this.width, this.height);
-            }
-        };
-    },
-
-    createBubbleGraphics : function() {
-        return {
-            graphics : game.add.graphics(0, 0),
-            text : null
-        };
-    },
-
-    messageBubble : function(g, x, y, msg, position) {
-        // x, y = position of the bubble's arrow bottom point (= top of the speaking character)
-        // position = 'right' (default), 'left' or 'center'
-        position = position || 'right'; // position of the bubble relatively to arrow
-
-        var text = new Phaser.Text(game, 0, 0, msg, { font: "18px Arial" }); // only to have text size
-        var arrow = null;
-        y -= 28; // bubble is above the speaker
-        if (position == 'right') {
-            arrow = [x + 16, y - 3, x + 8, y + 18, x + 32, y - 2];
-            x += text.width / 4;
-        } else if (position == 'left') {
-            arrow = [x - 16, y - 3, x - 8, y + 18, x - 32, y - 2];
-            x -= text.width / 4;
-        } else { // center
-            arrow = [x - 8, y - 2, x, y + 18, x + 8, y - 1];
-        }
-        var ellipseOriginY = y - text.height;
-        g.graphics.clear();
-        g.graphics.lineStyle(2, 0x000000);
-        g.graphics.beginFill(0xffffff);
-        g.graphics.drawEllipse(x, ellipseOriginY, 2 * text.width / 3, text.height);
-        g.graphics.endFill();
-        g.graphics.lineStyle(null);
-        g.graphics.beginFill(0xffffff);
-        g.graphics.drawPolygon(arrow);
-        g.graphics.endFill();
-        g.graphics.lineStyle(2, 0x000000);
-        g.graphics.drawPolygon(arrow);
-        if (g.text != null) {
-            g.text.kill();
-        }
-        g.text = game.add.text(x - text.width / 2, ellipseOriginY + 2 - text.height / 2, msg, { font: "18px Arial", fill: "black", align: "center" });
-    },
-
-    // collision callbacks
-
-    ticketCollect : function() {
-        this.tickets.kill();
-    },
-
-    argh : function() {
-        this.player.kill();
+        return Phaser.Timer.QUARTER * random(minQs, maxQs);
     },
 
     // create a new train
@@ -132,6 +55,8 @@ var trainState = {
         train.body.immovable = true;
         train.body.setSize(370, 48);
     },
+
+    // shortcut for similar sprite behaviours
 
     fixSpriteFactory : function(x, y, imgId, wHitBox /* optional */, hHitBox /* optional */, anchor /* optional */) {
         var decoration = this.mainGroup.create(x, y, imgId);
@@ -216,17 +141,17 @@ var trainState = {
         this.trainZoneOK = this.fixSpriteFactory(0, 160, null, GAME_WIDTH, 160);
         this.trainZoneOK.callback = function() {
             if (this.currentStep == this.GO_TRAIN_1) {
-                this.messageBubble(this.bubbleGraphics, 434, 156, "Vous n'avez pas de tickets !", 'right');
+                messageBubble(this.bubbleGraphics, 434, 156, "Vous n'avez pas de tickets !", 'right');
                 this.moustachMan.animations.play('moveLeft');
                 this.moustachMan.body.velocity.x = -30;
                 this.currentStep = this.PICK_TICKETS;
             } else if (this.currentStep == this.GO_TRAIN_2) {
-                this.messageBubble(this.bubbleGraphics, 434, 156, "Voyons, il faut composter vos billets !", 'left');
+                messageBubble(this.bubbleGraphics, 434, 156, "Voyons, il faut composter vos billets !", 'left');
                 this.blondie.animations.play('moveRight');
                 this.blondie.body.velocity.x = 30;
                 this.currentStep = this.COMPOST;
             } else if (this.currentStep == this.GO_TRAIN_3) {
-                this.messageBubble(this.bubbleGraphics, 434, 156, "Embarquement !", 'center');
+                messageBubble(this.bubbleGraphics, 434, 156, "Embarquement !", 'center');
                 this.missionWindow.setText('Bravo vous avez gagné... euh... voila...');
             }
         };
@@ -243,18 +168,18 @@ var trainState = {
         rightTrainKiller.body.immovable = true;
         rightTrainKiller.body.setSize(4, GAME_HEIGHT);
 
-        game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 0, this.randomDirection(), this.random(200, 400));
-        game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 1, this.randomDirection(), this.random(200, 400));
-        game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 2, this.randomDirection(), this.random(200, 400));
+        game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 0, this.randomDirection(), random(200, 400));
+        game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 1, this.randomDirection(), random(200, 400));
+        game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 2, this.randomDirection(), random(200, 400));
 
         this.cursors = game.input.keyboard.createCursorKeys();
         
         // graphics (to draw things directly, e.g. message bubbles)
         this.windowGraphics = game.add.graphics(0, 0);
-        this.missionWindow = this.drawWindow(this.windowGraphics, 0, 0, GAME_WIDTH, 64);
+        this.missionWindow = createWindow(this.windowGraphics, 0, 0, GAME_WIDTH, 64);
         this.missionWindow.setText("Allez rejoindre votre train ! (flèches pour se déplacer)");
-        this.bubbleGraphics = this.createBubbleGraphics();
-        this.messageBubble(this.bubbleGraphics, 434, 156, 'Bonjour à tous !');
+        this.bubbleGraphics = game.add.graphics(0, 0);
+        messageBubble(this.bubbleGraphics, 434, 156, 'Bonjour à tous !');
     },
 
     update : function() {
@@ -281,7 +206,7 @@ var trainState = {
                 player.kill();
             }, null, this);
             game.physics.arcade.overlap(this.trainArray[i], this.trainKillers, function(train) {
-                game.time.events.add(this.randomTime(2, 6), this.popTrain, this, train.lineId, this.randomDirection(), this.random(200, 400));
+                game.time.events.add(this.randomTime(2, 6), this.popTrain, this, train.lineId, this.randomDirection(), random(200, 400));
                 train.kill();
             }, null, this);
         }
