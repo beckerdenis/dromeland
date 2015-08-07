@@ -133,9 +133,13 @@ var trainState = {
         train.body.setSize(370, 48);
     },
 
-    fixSpriteFactory : function(x, y, imgId, wHitBox /* optional */, hHitBox /* optional */) {
+    fixSpriteFactory : function(x, y, imgId, wHitBox /* optional */, hHitBox /* optional */, anchor /* optional */) {
         var decoration = this.mainGroup.create(x, y, imgId);
-        decoration.anchor = {x : 0, y : 1};
+        if (anchor != null) {
+            decoration.anchor = anchor;
+        } else {
+            decoration.anchor = {x : 0, y : 1};
+        }
         game.physics.arcade.enable(decoration);
         decoration.body.immovable = true;
         if (wHitBox != null && hHitBox != null) {
@@ -162,11 +166,16 @@ var trainState = {
         this.mainGroup = game.add.group();
 
         // post (for the tickets)
-        this.post = this.fixSpriteFactory(24, 450, 'c01_post', 15, 17);
+        this.post = this.fixSpriteFactory(16, 470, 'c01_post', 15, 17);
+        this.post.callback = function() {
+            if (this.currentStep == this.COMPOST) {
+                this.currentStep = this.GO_TRAIN_3;
+            }
+        };
 
         // benches (for beautifulity)
-        this.bench1 = this.fixSpriteFactory(120, 474, 'c01_bench', 65, 15);
-        this.bench2 = this.fixSpriteFactory(440, 474, 'c01_bench', 65, 15);
+        this.bench1 = this.fixSpriteFactory(40, 474, 'c01_bench', 65, 15);
+        this.bench2 = this.fixSpriteFactory(538, 474, 'c01_bench', 65, 15, { x : 1, y : 1});
         this.bench3 = this.fixSpriteFactory(568, 474, 'c01_bench', 65, 15);
 
         // chef de gare
@@ -175,10 +184,16 @@ var trainState = {
         this.gareLeader.play('move');
 
         // moustachman
-        this.moustachMan = this.fixSpriteFactory(520, 438, 'c01_moustachman');
+        this.moustachMan = this.fixSpriteFactory(538, 450, 'c01_moustachman');
         this.moustachMan.frame = 1;
         this.moustachMan.animations.add('moveBottom', [0, 1, 2, 3], 10, true);
         this.moustachMan.animations.add('moveLeft', [4, 5, 6, 7], 10, true);
+
+        // blondie
+        this.blondie = this.fixSpriteFactory(10, 440, 'c01_blondie');
+        this.blondie.frame = 1;
+        this.blondie.animations.add('moveBottom', [0, 1, 2, 3], 10, true);
+        this.blondie.animations.add('moveRight', [4, 5, 6, 7], 10, true);
 
         // player physics & sprite
         this.player = this.mainGroup.create((GAME_WIDTH - 48) / 2, GAME_HEIGHT, 'player');
@@ -189,14 +204,31 @@ var trainState = {
         this.player.body.setSize(48, 32); // player hitbox
 
         // tickets physics & sprite
-        this.tickets = this.fixSpriteFactory(514, 476, 'c01_tickets');
+        this.tickets = this.fixSpriteFactory(539, 476, 'c01_tickets');
         this.tickets.animations.add('rotate', [0, 1, 2, 3, 2, 1], 10, true);
         this.tickets.play('rotate');
+        this.tickets.callback = function() {
+            this.tickets.kill();
+            this.currentStep = this.GO_TRAIN_2;
+        };
 
         // event boxes = contact triggers a scenario event
         this.trainZoneOK = this.fixSpriteFactory(0, 160, null, GAME_WIDTH, 160);
         this.trainZoneOK.callback = function() {
-            this.messageBubble(this.bubbleGraphics, 434, 156, "Vous n'avez pas de tickets !", 'left');
+            if (this.currentStep == this.GO_TRAIN_1) {
+                this.messageBubble(this.bubbleGraphics, 434, 156, "Vous n'avez pas de tickets !", 'right');
+                this.moustachMan.animations.play('moveLeft');
+                this.moustachMan.body.velocity.x = -30;
+                this.currentStep = this.PICK_TICKETS;
+            } else if (this.currentStep == this.GO_TRAIN_2) {
+                this.messageBubble(this.bubbleGraphics, 434, 156, "Voyons, il faut composter vos billets !", 'left');
+                this.blondie.animations.play('moveRight');
+                this.blondie.body.velocity.x = 30;
+                this.currentStep = this.COMPOST;
+            } else if (this.currentStep == this.GO_TRAIN_3) {
+                this.messageBubble(this.bubbleGraphics, 434, 156, "Embarquement !", 'center');
+                this.missionWindow.setText('Bravo vous avez gagné... euh... voila...');
+            }
         };
 
         // train killer sprite (offscreen)
@@ -206,7 +238,9 @@ var trainState = {
         var rightTrainKiller = this.trainKillers.create(this.trainOriginX[this.leftDir] - this.trainOriginX[this.rightDir] + 8, 0, null);
         game.physics.arcade.enable(leftTrainKiller);
         game.physics.arcade.enable(rightTrainKiller);
+        leftTrainKiller.body.immovable = true;
         leftTrainKiller.body.setSize(4, GAME_HEIGHT);
+        rightTrainKiller.body.immovable = true;
         rightTrainKiller.body.setSize(4, GAME_HEIGHT);
 
         game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 0, this.randomDirection(), this.random(200, 400));
@@ -229,14 +263,16 @@ var trainState = {
 
         // standard collisions
         game.physics.arcade.collide(this.player, this.northBound);
-        game.physics.arcade.collide(this.player, this.tickets);
         game.physics.arcade.collide(this.player, this.bench1);
         game.physics.arcade.collide(this.player, this.bench2);
         game.physics.arcade.collide(this.player, this.bench3);
-        game.physics.arcade.collide(this.player, this.post);
         game.physics.arcade.collide(this.player, this.gareLeader);
+        game.physics.arcade.collide(this.player, this.moustachMan);
+        game.physics.arcade.collide(this.player, this.blondie);
 
         // collisions with special behaviours
+        game.physics.arcade.collide(this.player, this.tickets, this.tickets.callback, null, this);
+        game.physics.arcade.collide(this.player, this.post, this.post.callback, null, this);
         if (this.currentStep == this.GO_TRAIN_1 || this.currentStep == this.GO_TRAIN_2 || this.currentStep == this.GO_TRAIN_3) {
             game.physics.arcade.collide(this.player, this.trainZoneOK, this.trainZoneOK.callback, null, this);
         }
@@ -244,10 +280,28 @@ var trainState = {
             game.physics.arcade.collide(this.trainArray[i], this.player, function(train, player) {
                 player.kill();
             }, null, this);
-            game.physics.arcade.collide(this.trainArray[i], this.trainKillers, function(train) {
+            game.physics.arcade.overlap(this.trainArray[i], this.trainKillers, function(train) {
                 game.time.events.add(this.randomTime(2, 6), this.popTrain, this, train.lineId, this.randomDirection(), this.random(200, 400));
                 train.kill();
             }, null, this);
+        }
+
+        // animations check
+        if (this.moustachMan.body.x < GAME_WIDTH / 2) {
+            this.moustachMan.body.velocity.x = 0;
+            this.moustachMan.body.velocity.y = 30;
+            this.moustachMan.animations.play('moveBottom');
+            this.moustachMan.body.x = GAME_WIDTH / 2;
+        } else if (this.moustachMan.body.y > GAME_HEIGHT) {
+            this.moustachMan.kill();
+        }
+        if (this.blondie.body.x > GAME_WIDTH / 2) {
+            this.blondie.body.velocity.x = 0;
+            this.blondie.body.velocity.y = 30;
+            this.blondie.animations.play('moveBottom');
+            this.blondie.body.x = GAME_WIDTH / 2;
+        } else if (this.blondie.body.y > GAME_HEIGHT) {
+            this.blondie.kill();
         }
 
         // player movement

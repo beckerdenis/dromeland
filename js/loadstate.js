@@ -10,9 +10,10 @@ var loadState = {
         game.load.image('c01_bench', 'img/c01_bench.png');
         game.load.image('c01_post', 'img/c01_post.png');
 		game.load.spritesheet('c01_train', 'img/c01_train.png', 370, 124, 6);
-		game.load.spritesheet('c01_tickets', 'img/c01_tickets.png', 45, 35);
+		game.load.spritesheet('c01_tickets', 'img/c01_tickets.png', 30, 23);
         game.load.spritesheet('c01_chef_de_gare', 'img/c01_chef_de_gare.png', 27, 32);
         game.load.spritesheet('c01_moustachman', 'img/c01_moustachman.png', 32, 32, 8);
+        game.load.spritesheet('c01_blondie', 'img/c01_blondie.png', 32, 32, 8);
 	},
 
 	create : function() {
