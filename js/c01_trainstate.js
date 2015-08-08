@@ -60,14 +60,10 @@ var trainState = {
 
     fixSpriteFactory : function(x, y, imgId, wHitBox /* optional */, hHitBox /* optional */, anchor /* optional */) {
         var decoration = this.mainGroup.create(x, y, imgId);
-        if (anchor != null) {
-            decoration.anchor = anchor;
-        } else {
-            decoration.anchor = {x : 0, y : 1};
-        }
+        decoration.anchor = anchor || { x : 0, y : 1 };
         game.physics.arcade.enable(decoration);
         decoration.body.immovable = true;
-        if (wHitBox != null && hHitBox != null) {
+        if (wHitBox != undefined && hHitBox != undefined) {
             decoration.body.setSize(wHitBox, hHitBox);
         }
         return decoration;
@@ -121,12 +117,7 @@ var trainState = {
         this.blondie.animations.add('moveRight', [4, 5, 6, 7], 10, true);
 
         // player physics & sprite
-        this.player = this.mainGroup.create((GAME_WIDTH - 48) / 2, GAME_HEIGHT, 'player');
-        this.player.animations.add('move', [1, 0], 10, true);
-        this.player.anchor = {x : 0, y : 1};
-        game.physics.arcade.enable(this.player);
-        this.player.body.collideWorldBounds = true;
-        this.player.body.setSize(48, 32); // player hitbox
+        this.player = loadPlayer(GAME_WIDTH / 2, GAME_HEIGHT, game.physics.arcade, this.mainGroup);
 
         // tickets physics & sprite
         this.tickets = this.fixSpriteFactory(539, 476, 'c01_tickets');
@@ -152,7 +143,10 @@ var trainState = {
                 this.currentStep = this.COMPOST;
             } else if (this.currentStep == this.GO_TRAIN_3) {
                 messageBubble(this.bubbleGraphics, 434, 156, "Embarquement !", 'center');
-                this.missionWindow.setText('Bravo vous avez gagné... euh... voila...');
+                this.missionWindow.setText('Bravo vous êtes montés dans le train à temps !');
+                game.time.events.add(Phaser.Timer.SECOND * 2, function() {
+                    game.state.start('larzac');
+                });
             }
         };
 
@@ -235,25 +229,35 @@ var trainState = {
 
         if (this.cursors.down.isDown) {
             this.player.body.velocity.y = this.playerSpeed;
+            this.player.animations.play('moveDown');
+            this.player.lastDir = 0;
             moving = true;
         } else if (this.cursors.up.isDown) {
             this.player.body.velocity.y = -this.playerSpeed;
+            this.player.animations.play('moveUp');
+            this.player.lastDir = 12;
             moving = true;
         }
 
         if (this.cursors.left.isDown) {
             this.player.body.velocity.x = -this.playerSpeed;
+            if (this.player.body.velocity.y == 0) {
+                this.player.animations.play('moveLeft');
+                this.player.lastDir = 4;
+            }
             moving = true;
         } else if (this.cursors.right.isDown) {
             this.player.body.velocity.x = this.playerSpeed;
+            if (this.player.body.velocity.y == 0) {
+                this.player.animations.play('moveRight');
+                this.player.lastDir = 8;
+            }
             moving = true;
         }
 
-        if (moving) {
-            this.player.animations.play('move');
-        } else {
+        if (!moving) {
             this.player.animations.stop();
-            this.player.frame = 0;
+            this.player.frame = this.player.lastDir || 0;
         }
     }
 

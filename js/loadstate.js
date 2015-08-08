@@ -2,7 +2,7 @@ var loadState = {
 
     preload : function() {
         game.add.text(80, 150, 'Chargement en cours...',{ font : '30px serif', fill : '#ffffff' });
-        game.load.spritesheet('player', 'img/bonhomme.png', 48, 64);
+        game.load.spritesheet('player', 'img/player.png', 64, 64, 16);
         // Niveau 1 : la gare
         game.load.image('c01_background_part1', 'img/c01_background_part1.png');
         game.load.image('c01_background_part2', 'img/c01_background_part2.png');
@@ -15,7 +15,9 @@ var loadState = {
         game.load.spritesheet('c01_blondie', 'img/c01_blondie.png', 32, 32, 8);
         // Niveau 3 : larzac
         game.load.image('c03_level', 'img/c03_level.png');
-        game.load.spritesheet('c03_larzac', 'img/c03_larzac.png', 32, 32);
+        game.load.spritesheet('c03_platform', 'img/c03_platform.png');
+        game.load.spritesheet('c03_larzac', 'img/c03_larzac.png', 19, 36);
+        game.load.audio('c03_boing', 'audio/c03_boing.ogg');
     },
 
     create : function() {

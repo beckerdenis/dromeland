@@ -8,15 +8,29 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function loadPlayer(x, y, physics, group /* optional */) {
+    var player = null;
+    if (group != undefined) {
+        player = group.create(x, y, 'player');
+    } else {
+        player = game.add.sprite(x, y, 'player');
+    }
+    player.animations.add('moveDown', [1, 2, 3, 0], 10, true);
+    player.animations.add('moveLeft', [5, 6, 7, 4], 10, true);
+    player.animations.add('moveRight', [9, 10, 11, 8], 10, true);
+    player.animations.add('moveUp', [13, 14, 15, 12], 10, true);
+    player.anchor = {x : 0.5, y : 1};
+    physics.enable(player);
+    player.body.collideWorldBounds = true;
+    player.body.setSize(32, 18, 0, -4);
+    return player;
+}
+
 function createWindow(g, x, y, w, h, backgroundColor /* optional */) {
     // g = graphics object
     g.fixedToCamera = true;
     g.lineStyle(4, 0x000000, 0.9);
-    if (backgroundColor != null) {
-        g.beginFill(backgroundColor, 0.9);
-    } else {
-        g.beginFill(0xddddff, 0.9);
-    }
+    g.beginFill(backgroundColor || 0xddddff, 0.9);
     g.drawRoundedRect(x, y, w, h, 4);
     g.endFill();
     return {
@@ -28,16 +42,20 @@ function createWindow(g, x, y, w, h, backgroundColor /* optional */) {
             if (this.text != null) {
                 this.text.kill();
             }
-            this.text = game.add.text(this.xCoord, this.yCoord, text, { font: "18px Arial", fill: "black", align: "center", boundsAlignH: "center", boundsAlignV: "middle" });
+            this.text = game.add.text(this.xCoord, this.yCoord + 4, text, { font: "18px Arial", fill: "black", align: "center", boundsAlignH: "center", boundsAlignV: "middle" });
             this.text.setTextBounds(this.xCoord, this.yCoord, this.width, this.height);
+            this.text.fixedToCamera = true;
         }
     };
 }
 
-function createJauge(g, x, y, w, h, maxFill) {
+function createJauge(g, x, y, w, h, maxFill, text /* optional */) {
     var localWindow = createWindow(g, x, y, w, h, 0xffffff);
     var localGraphics = game.add.graphics(0, 0);
     localGraphics.fixedToCamera = true;
+    if (text != undefined) {
+        localWindow.setText(text);
+    }
     return {
         graphics : localGraphics,
         xCoord : x + 4,
@@ -46,6 +64,7 @@ function createJauge(g, x, y, w, h, maxFill) {
         height : h - 8,
         max : maxFill,
         fill : 0,
+        backText : text,
         setFill : function(fill) {
             if (fill > this.max) {
                 fill = this.max;
