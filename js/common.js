@@ -91,13 +91,13 @@ function messageBubble(g, x, y, msg, position) {
     var arrow = null;
     y -= 28; // bubble is above the speaker
     if (position == 'right') {
-        arrow = [x + 16, y - 3, x + 8, y + 18, x + 32, y - 2];
+        arrow = [x + 16, y - 4, x + 8, y + 18, x + 32, y - 4];
         x += text.width / 4;
     } else if (position == 'left') {
-        arrow = [x - 16, y - 3, x - 8, y + 18, x - 32, y - 2];
+        arrow = [x - 16, y - 4, x - 8, y + 18, x - 32, y - 4];
         x -= text.width / 4;
     } else { // center
-        arrow = [x - 8, y - 2, x, y + 18, x + 8, y - 1];
+        arrow = [x - 8, y - 4, x, y + 18, x + 8, y - 4];
     }
     var ellipseOriginY = y - text.height;
     g.clear();

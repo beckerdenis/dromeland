@@ -20,6 +20,8 @@ var larzacState = {
 
     currentStep : null,
 
+    pigCount : 0,
+
     // utilities
 
     createPlatform : function(group, x, y, w, h, spriteName /* optional */) {
@@ -69,20 +71,22 @@ var larzacState = {
 
         // event zones
         this.farmZone = game.add.sprite(2290, 0, null);
-        this.farmZone.callback = function() {
-            if (this.currentStep == this.GO_TO_FARM_1) {
-                messageBubble(this.bubbleGraphics, 2416, 264, "Vous pouvez aller chercher l'oeuf ?\nIl doit y en avoir un, maintenant !", 'left');
-                this.currentStep = this.PICK_THE_EGG;
-            } else if (this.currentStep == this.GO_TO_FARM_2) {
-                messageBubble(this.bubbleGraphics, 2416, 264, "Ah, vous voulez voir les cochons ?\nAllez leur rendre visite alors !", 'left');
-                this.currentStep = this.SAY_HI_TO_THE_PIGS;
-            } else if (this.currentStep == this.GO_TO_FARM_3) {
-            }
-        }
         game.physics.arcade.enable(this.farmZone);
         this.farmZone.body.setSize(40, GAME_HEIGHT);
         this.farmZone.body.immovable = true;
         this.farmZone.body.allowGravity = false;
+
+        this.pigs = game.add.group();
+        var pig1 = this.pigs.create(1314, 286, null);
+        game.physics.arcade.enable(pig1);
+        pig1.body.setSize(69, 43);
+        pig1.body.allowGravity = false;
+        pig1.body.immovable = true;
+        var pig2 = this.pigs.create(1958, 286, null);
+        game.physics.arcade.enable(pig2);
+        pig2.body.setSize(69, 43);
+        pig2.body.allowGravity = false;
+        pig2.body.immovable = true;
 
         // messageWindow
         this.windowGraphics = game.add.graphics(0, 0);
@@ -97,6 +101,8 @@ var larzacState = {
 
         // audio
         this.sound.boing = game.add.audio('c03_boing');
+        this.sound.groink = game.add.audio('c03_groink');
+        this.sound.success = game.add.audio('success');
 
         this.cursors = game.input.keyboard.createCursorKeys();
     },
@@ -105,12 +111,47 @@ var larzacState = {
         // simple collisions
         game.physics.arcade.collide(this.player, this.platforms);
         game.physics.arcade.collide(this.larzac, this.platforms);
+        if (this.oeuf != undefined) {
+            game.physics.arcade.collide(this.oeuf, this.platforms);
+        }
         
         // special collisions
+        if (this.currentStep == this.PICK_THE_EGG && game.physics.arcade.collide(this.player, this.oeuf)) {
+            this.sound.success.play();
+            this.oeuf.kill();
+            this.currentStep = this.GO_TO_THE_FARM_2;
+        }
+        if (this.currentStep == this.SAY_HI_TO_THE_PIGS) {
+            game.physics.arcade.collide(this.player, this.pigs, function(player, pig) {
+                this.sound.groink.play();
+                messageBubble(this.bubbleGraphics, pig.body.x + 40, pig.body.y, "Groink !!");
+                pig.kill();
+                this.pigCount++;
+                if (this.pigCount == 2) {
+                    this.currentStep = this.GO_TO_THE_FARM_3;
+                }
+            }, null, this);
+        }
         if (game.physics.arcade.intersects(this.player.body, this.larzac.body)) {
             this.dirtiness.setFill(this.dirtiness.fill + 2);
         }
-        game.physics.arcade.overlap(this.player, this.farmZone, this.farmZone.callback, null, this);
+        if (game.physics.arcade.intersects(this.player.body, this.farmZone.body)) {
+            if (this.currentStep == this.GO_TO_THE_FARM_1) {
+                messageBubble(this.bubbleGraphics, 2416, 264, "Vous pouvez aller chercher l'oeuf ?\nIl devrait y en avoir un maintenant,\nprès de la voiture !", 'left');
+                this.currentStep = this.PICK_THE_EGG;
+                this.oeuf = game.add.sprite(200, 200, 'c03_oeuf');
+                this.oeuf.animations.add('move', [0, 1], 5, true);
+                this.oeuf.animations.play('move');
+                game.physics.arcade.enable(this.oeuf);
+            } else if (this.currentStep == this.GO_TO_THE_FARM_2) {
+                messageBubble(this.bubbleGraphics, 2416, 264, "Ah, vous voulez voir les cochons ?\nAllez leur rendre visite alors !", 'left');
+                this.currentStep = this.SAY_HI_TO_THE_PIGS;
+            } else if (this.currentStep == this.GO_TO_THE_FARM_3) {
+                messageBubble(this.bubbleGraphics, 2416, 264, "Venez, entrez !", 'left');
+                this.missionWindow.setText("Bravo, vous avez atteint la ferme !");
+                this.currentStep = -1;
+            }
+        }
 
         // player movement
         this.player.body.velocity.x = 0;

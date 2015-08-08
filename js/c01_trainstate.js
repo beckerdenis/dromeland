@@ -90,6 +90,7 @@ var trainState = {
         this.post = this.fixSpriteFactory(16, 470, 'c01_post', 15, 17);
         this.post.callback = function() {
             if (this.currentStep == this.COMPOST) {
+                this.sound.success.play();
                 this.currentStep = this.GO_TRAIN_3;
             }
         };
@@ -124,6 +125,7 @@ var trainState = {
         this.tickets.animations.add('rotate', [0, 1, 2, 3, 2, 1], 10, true);
         this.tickets.play('rotate');
         this.tickets.callback = function() {
+            this.sound.success.play();
             this.tickets.kill();
             this.currentStep = this.GO_TRAIN_2;
         };
@@ -145,8 +147,9 @@ var trainState = {
                 messageBubble(this.bubbleGraphics, 434, 156, "Embarquement !", 'center');
                 this.missionWindow.setText('Bravo vous êtes montés dans le train à temps !');
                 game.time.events.add(Phaser.Timer.SECOND * 2, function() {
+                    this.sound.music.stop();
                     game.state.start('larzac');
-                });
+                }, this);
             }
         };
 
@@ -166,14 +169,22 @@ var trainState = {
         game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 1, this.randomDirection(), random(200, 400));
         game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 2, this.randomDirection(), random(200, 400));
 
-        this.cursors = game.input.keyboard.createCursorKeys();
-        
         // graphics (to draw things directly, e.g. message bubbles)
         this.windowGraphics = game.add.graphics(0, 0);
         this.missionWindow = createWindow(this.windowGraphics, 0, 0, GAME_WIDTH, 64);
         this.missionWindow.setText("Allez rejoindre votre train ! (flèches pour se déplacer)");
         this.bubbleGraphics = game.add.graphics(0, 0);
         messageBubble(this.bubbleGraphics, 434, 156, 'Bonjour à tous !');
+
+        // audio
+        this.sound.success = game.add.audio('success');
+        this.sound.shock = game.add.audio('c01_shock');
+        this.sound.music = game.add.audio('c01_music');
+        game.sound.setDecodedCallback(this.sound.music, function() {
+            this.sound.music.loopFull();
+        }, this);
+
+        this.cursors = game.input.keyboard.createCursorKeys();
     },
 
     update : function() {
@@ -197,6 +208,7 @@ var trainState = {
         }
         for (var i = 0; i < this.trainArray.length; i++) {
             game.physics.arcade.collide(this.trainArray[i], this.player, function(train, player) {
+                this.sound.play('c01_shock');
                 player.kill();
             }, null, this);
             game.physics.arcade.overlap(this.trainArray[i], this.trainKillers, function(train) {

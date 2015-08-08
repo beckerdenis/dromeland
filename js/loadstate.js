@@ -3,6 +3,7 @@ var loadState = {
     preload : function() {
         game.add.text(80, 150, 'Chargement en cours...',{ font : '30px serif', fill : '#ffffff' });
         game.load.spritesheet('player', 'img/player.png', 64, 64, 16);
+        game.load.audio('success', 'audio/success.ogg');
         // Niveau 1 : la gare
         game.load.image('c01_background_part1', 'img/c01_background_part1.png');
         game.load.image('c01_background_part2', 'img/c01_background_part2.png');
@@ -13,11 +14,15 @@ var loadState = {
         game.load.spritesheet('c01_chef_de_gare', 'img/c01_chef_de_gare.png', 27, 32);
         game.load.spritesheet('c01_moustachman', 'img/c01_moustachman.png', 32, 32, 8);
         game.load.spritesheet('c01_blondie', 'img/c01_blondie.png', 32, 32, 8);
+        game.load.audio('c01_music', 'audio/c01_music.ogg');
+        game.load.audio('c01_shock', 'audio/c01_shock.ogg');
         // Niveau 3 : larzac
         game.load.image('c03_level', 'img/c03_level.png');
         game.load.spritesheet('c03_platform', 'img/c03_platform.png');
         game.load.spritesheet('c03_larzac', 'img/c03_larzac.png', 19, 36);
+        game.load.spritesheet('c03_oeuf', 'img/c03_oeuf.png', 32, 32);
         game.load.audio('c03_boing', 'audio/c03_boing.ogg');
+        game.load.audio('c03_groink', 'audio/c03_groink.ogg');
     },
 
     create : function() {
