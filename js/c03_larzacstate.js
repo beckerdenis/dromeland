@@ -150,6 +150,9 @@ var larzacState = {
                 messageBubble(this.bubbleGraphics, 2416, 264, "Venez, entrez !", 'left');
                 this.missionWindow.setText("Bravo, vous avez atteint la ferme !");
                 this.currentStep = -1;
+                game.time.events.add(Phaser.Timer.SECOND * 2, function() {
+                    nextState('pigs', 'c01_transition');
+                }, this);
             }
         }
 
@@ -169,7 +172,7 @@ var larzacState = {
         if (this.larzacUnchained) {
             if (this.larzac.body.touching.down) {
                 var diff = this.player.body.x - this.larzac.body.x;
-                this.larzac.body.velocity.x = random(diff + 3 * diff / 4, 7 * diff / 3);
+                this.larzac.body.velocity.x = random(9 * diff / 4, 11 * diff / 4);
                 this.larzac.body.velocity.y = -random(300, 600);
                 this.sound.boing.play('', 0, 40 / Math.max(40, Math.abs(diff)));
             }

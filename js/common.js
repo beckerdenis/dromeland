@@ -42,20 +42,21 @@ function createWindow(g, x, y, w, h, backgroundColor /* optional */) {
             if (this.text != null) {
                 this.text.kill();
             }
-            this.text = game.add.text(this.xCoord, this.yCoord + 4, text, { font: "18px Arial", fill: "black", align: "center", boundsAlignH: "center", boundsAlignV: "middle" });
+            this.text = game.add.text(this.xCoord, this.yCoord + 4, text, { font: "18px Arial", fill: "black", align: 'align', boundsAlignH: "center", boundsAlignV: "middle" });
             this.text.setTextBounds(this.xCoord, this.yCoord, this.width, this.height);
             this.text.fixedToCamera = true;
         }
     };
 }
 
-function createJauge(g, x, y, w, h, maxFill, text /* optional */) {
+function createJauge(g, x, y, w, h, maxFill, text /* optional */, fillColor /* optional */) {
     var localWindow = createWindow(g, x, y, w, h, 0xffffff);
     var localGraphics = game.add.graphics(0, 0);
     localGraphics.fixedToCamera = true;
     if (text != undefined) {
         localWindow.setText(text);
     }
+    var fillColor = fillColor || 0xaa6611;
     return {
         graphics : localGraphics,
         xCoord : x + 4,
@@ -65,20 +66,30 @@ function createJauge(g, x, y, w, h, maxFill, text /* optional */) {
         max : maxFill,
         fill : 0,
         backText : text,
+        color : fillColor,
         setFill : function(fill) {
             if (fill > this.max) {
                 fill = this.max;
             }
             this.graphics.clear();
-            this.graphics.lineStyle(null);
-            this.graphics.beginFill(0xaa6611, 0.9);
-            var bw = Math.round(fill * this.width / this.max);
-            bw = (bw < 12 ? 12 : bw); // solve phaser bug
-            this.graphics.drawRoundedRect(this.xCoord, this.yCoord, bw, this.height, 4);
-            this.graphics.endFill();
+            if (fill > 0) {
+                this.graphics.lineStyle(null);
+                this.graphics.beginFill(this.color, 0.9);
+                var bw = Math.round(fill * this.width / this.max);
+                bw = (bw < 12 ? 12 : bw); // solve phaser bug
+                this.graphics.drawRoundedRect(this.xCoord, this.yCoord, bw, this.height, 4);
+                this.graphics.endFill();
+            }
             this.fill = fill;
         }
     };
+}
+
+function clearMessageBubble(g) {
+    if (g.text != null) {
+        g.text.kill();
+    }
+    g.clear();
 }
 
 function messageBubble(g, x, y, msg, position) {
@@ -114,5 +125,5 @@ function messageBubble(g, x, y, msg, position) {
     if (g.text != null) {
         g.text.kill();
     }
-    g.text = game.add.text(x - text.width / 2, ellipseOriginY + 2 - text.height / 2, msg, { font: "18px Arial", fill: "black", align: "center" });
+    g.text = game.add.text(x - text.width / 2, ellipseOriginY + 2 - text.height / 2, msg, { font : "18px Arial", fill : "black", align : "center" });
 }
