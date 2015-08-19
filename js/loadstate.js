@@ -6,6 +6,21 @@ var loadState = {
         game.load.audio('success', 'audio/success.ogg');
         game.load.audio('failure', 'audio/failure.ogg');
         game.load.audio('transition', 'audio/transition.ogg');
+        // Transitions
+        game.load.image('01t1', 'img/transitions/c00_t_01.png');
+        game.load.image('01t2', 'img/transitions/c00_t_02.png');
+        game.load.image('01t3', 'img/transitions/c00_t_03.png');
+        game.load.image('01t4', 'img/transitions/c00_t_04.png');
+        game.load.image('01t5', 'img/transitions/c00_t_05.png');
+        
+        game.load.image('02t1', 'img/transitions/c01_t_01.png');
+        game.load.image('02t2', 'img/transitions/c01_t_02.png');
+        game.load.image('02t3', 'img/transitions/c01_t_03.png');
+        game.load.image('02t4', 'img/transitions/c01_t_04.png');
+        game.load.image('02t5', 'img/transitions/c01_t_05.png');
+        
+        game.load.image('03t1', 'img/transitions/c02_t_01.png');
+        game.load.image('03t2', 'img/transitions/c02_t_02.png');
         // Niveau 1 : la gare
         game.load.image('c01_background_part1', 'img/c01_background_part1.png');
         game.load.image('c01_background_part2', 'img/c01_background_part2.png');
@@ -53,7 +68,13 @@ var loadState = {
     },
 
     create : function() {
-        game.state.start('bike');
+        nextState('train', [
+            '01t1', 'transition',
+            '01t2', '',
+            '01t3', '',
+            '01t4', '',
+            '01t5', ''
+        ]);
     }
 
 };

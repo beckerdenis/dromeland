@@ -148,7 +148,13 @@ var trainState = {
                 this.missionWindow.setText('Bravo vous êtes montés dans le train à temps !');
                 game.time.events.add(Phaser.Timer.SECOND * 2, function() {
                     this.sound.music.stop();
-                    nextState('larzac', 'c01_transition');
+                    nextState('larzac', [
+                        '02t1', 'transition',
+                        '02t2', '',
+                        '02t3', '',
+                        '02t4', '',
+                        '02t5', ''
+                    ]);
                 }, this);
             }
         };

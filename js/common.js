@@ -34,6 +34,7 @@ function createWindow(g, x, y, w, h, backgroundColor /* optional */) {
     g.drawRoundedRect(x, y, w, h, 8);
     g.endFill();
     return {
+        graphx : g,
         xCoord : x,
         yCoord : y,
         width : w,
@@ -45,6 +46,10 @@ function createWindow(g, x, y, w, h, backgroundColor /* optional */) {
             this.text = game.add.text(this.xCoord, this.yCoord + 4, text, { font: "18px Arial", fill: "black", align: 'align', boundsAlignH: "center", boundsAlignV: "middle" });
             this.text.setTextBounds(this.xCoord, this.yCoord, this.width, this.height);
             this.text.fixedToCamera = true;
+        },
+        bringToTop : function() {
+            game.world.bringToTop(this.graphx);
+            game.world.bringToTop(this.text);
         }
     };
 }

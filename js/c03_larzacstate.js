@@ -149,7 +149,10 @@ var larzacState = {
                 this.missionWindow.setText("Bravo, vous avez atteint la ferme !");
                 this.currentStep = -1;
                 game.time.events.add(Phaser.Timer.SECOND * 2, function() {
-                    nextState('pigs', 'c01_transition');
+                    nextState('pigs', [
+                        '03t1', 'transition',
+                        '03t2', 'transition'
+                    ]);
                 }, this);
             }
         }
