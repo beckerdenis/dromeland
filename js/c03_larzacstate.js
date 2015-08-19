@@ -38,8 +38,8 @@ var larzacState = {
     create : function() {
         this.currentStep = this.GO_TO_THE_FARM_1;
 
-        game.world.setBounds(0, 0, this.levelWidth, 480);
-        game.add.tileSprite(0, 0, this.levelWidth, 480, 'c03_level');
+        game.world.setBounds(0, 0, this.levelWidth, GAME_HEIGHT);
+        game.add.tileSprite(0, 0, this.levelWidth, GAME_HEIGHT, 'c03_level');
         
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.physics.arcade.gravity.y = 1500;
@@ -95,9 +95,7 @@ var larzacState = {
         this.bubbleGraphics = game.add.graphics(0, 0);
 
         // graphics (drawing dirtiness)
-        this.graphics = game.add.graphics(0, 0);
-        var wDirty = 600;
-        this.dirtiness = createJauge(this.graphics, (GAME_WIDTH - wDirty) / 2, 72, wDirty, 32, 100, "Niveau de salissure");
+        this.dirtiness = createJauge(game.add.graphics(0, 0), (GAME_WIDTH - 600) / 2, 72, 600, 32, 100, "Niveau de salissure");
 
         // audio
         this.sound.boing = game.add.audio('c03_boing');

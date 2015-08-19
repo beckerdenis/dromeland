@@ -21,7 +21,7 @@ var loadState = {
         game.load.audio('c01_shock', 'audio/c01_shock.ogg');
         // Niveau 3 : larzac
         game.load.image('c03_level', 'img/c03_level.png');
-        game.load.spritesheet('c03_platform', 'img/c03_platform.png');
+        game.load.image('c03_platform', 'img/c03_platform.png');
         game.load.spritesheet('c03_larzac', 'img/c03_larzac.png', 19, 36);
         game.load.spritesheet('c03_oeuf', 'img/c03_oeuf.png', 32, 32);
         game.load.audio('c03_boing', 'audio/c03_boing.ogg');
@@ -30,6 +30,13 @@ var loadState = {
         game.load.image('c04_background', 'img/c04_background.png');
         game.load.image('c04_chrono', 'img/c04_chrono.png');
         game.load.spritesheet('c04_pig', 'img/c04_pig.png', 64, 64, 12);
+        // Niveau 6 : route
+        game.load.image('c06_background', 'img/c06_background.png');
+        game.load.image('c06_car1', 'img/c06_car1.png');
+        game.load.image('c06_car2', 'img/c06_car2.png');
+        game.load.image('c06_meme', 'img/c06_meme.png');
+        game.load.spritesheet('c06_goat', 'img/c06_goat.png', 101, 96);
+        game.load.spritesheet('c06_player', 'img/c06_player.png', 64, 64);
         // Niveau 8 : photobomb
         game.load.image('c08_background', 'img/c08_background.png');
         game.load.image('c08_maries', 'img/c08_maries.png');
@@ -46,7 +53,7 @@ var loadState = {
     },
 
     create : function() {
-        game.state.start('train');
+        game.state.start('bike');
     }
 
 };

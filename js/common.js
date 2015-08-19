@@ -31,7 +31,7 @@ function createWindow(g, x, y, w, h, backgroundColor /* optional */) {
     g.fixedToCamera = true;
     g.lineStyle(4, 0x000000, 0.9);
     g.beginFill(backgroundColor || 0xddddff, 0.9);
-    g.drawRoundedRect(x, y, w, h, 4);
+    g.drawRoundedRect(x, y, w, h, 8);
     g.endFill();
     return {
         xCoord : x,
@@ -76,8 +76,8 @@ function createJauge(g, x, y, w, h, maxFill, text /* optional */, fillColor /* o
                 this.graphics.lineStyle(null);
                 this.graphics.beginFill(this.color, 0.9);
                 var bw = Math.round(fill * this.width / this.max);
-                bw = (bw < 12 ? 12 : bw); // solve phaser bug
-                this.graphics.drawRoundedRect(this.xCoord, this.yCoord, bw, this.height, 4);
+                bw = (bw < 20 ? 20 : bw); // solve phaser bug
+                this.graphics.drawRoundedRect(this.xCoord, this.yCoord, bw, this.height, 8);
                 this.graphics.endFill();
             }
             this.fill = fill;
