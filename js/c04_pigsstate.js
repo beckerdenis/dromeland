@@ -138,7 +138,7 @@ var pigsState = {
                 messageBubble(game.add.graphics(0, 0), 320, 480, "T'en as compté " + this.count + " ?\nAh... ben c'est pas bon,\nil y en a " + this.totalPigs + " en fait !", "center");
             }
             game.time.events.add(Phaser.Timer.SECOND * 2, function() {
-                nextState('photobomb', 'c01_transition');
+                nextState('music', [], { img : '04t1', text : '~ Chapitre 4 ~\n      Musique' });
             }, this);
             this.remainingTime = -1;
         }

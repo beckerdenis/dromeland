@@ -3,7 +3,7 @@ game.state.add('train', trainState);
 //game.state.add('bonusCar', bonusCarState);
 game.state.add('larzac', larzacState);
 game.state.add('pigs', pigsState);
-//game.state.add('music', musicState);
+game.state.add('music', musicState);
 game.state.add('bike', bikeState);
 //game.state.add('pirate', pirateState);
 game.state.add('photobomb', photobombState);

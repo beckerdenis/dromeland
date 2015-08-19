@@ -43,7 +43,7 @@ function createWindow(g, x, y, w, h, backgroundColor /* optional */) {
             if (this.text != null) {
                 this.text.kill();
             }
-            this.text = game.add.text(this.xCoord, this.yCoord + 4, text, { font: "18px Arial", fill: "black", align: 'align', boundsAlignH: "center", boundsAlignV: "middle" });
+            this.text = game.add.text(this.xCoord, this.yCoord + 4, text, { font: "18px Arial", fill: "black", align: 'center', boundsAlignH: "center", boundsAlignV: "middle" });
             this.text.setTextBounds(this.xCoord, this.yCoord, this.width, this.height);
             this.text.fixedToCamera = true;
         },

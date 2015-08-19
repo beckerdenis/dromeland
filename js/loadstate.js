@@ -12,6 +12,9 @@ var loadState = {
         game.load.image('01t3', 'img/transitions/c00_t_03.png');
         game.load.image('01t4', 'img/transitions/c00_t_04.png');
         game.load.image('01t5', 'img/transitions/c00_t_05.png');
+        game.load.audio('intro1', 'audio/intro1.ogg');
+        game.load.audio('intro2', 'audio/intro2.ogg');
+        game.load.audio('intro3', 'audio/intro3.ogg');
         
         game.load.image('02t1', 'img/transitions/c01_t_01.png');
         game.load.image('02t2', 'img/transitions/c01_t_02.png');
@@ -21,6 +24,10 @@ var loadState = {
         
         game.load.image('03t1', 'img/transitions/c02_t_01.png');
         game.load.image('03t2', 'img/transitions/c02_t_02.png');
+        
+        game.load.image('04t1', 'img/transitions/c05_t_01.png');
+        
+        game.load.image('05t1', 'img/transitions/c06_t_01.png');
         // Niveau 1 : la gare
         game.load.image('c01_background_part1', 'img/c01_background_part1.png');
         game.load.image('c01_background_part2', 'img/c01_background_part2.png');
@@ -68,13 +75,13 @@ var loadState = {
     },
 
     create : function() {
+        //game.state.start('music');
         nextState('train', [
-            '01t1', 'transition',
-            '01t2', '',
-            '01t3', '',
-            '01t4', '',
-            '01t5', ''
-        ]);
+            { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
+            { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis par un objet enchanté." },
+            { img : '01t3', music : 'intro3' },
+            { img : '01t4' },
+        ], { img : '01t5', text : '~ Chapitre 1 ~\n      La Gare' });
     }
 
 };

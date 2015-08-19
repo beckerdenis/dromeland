@@ -149,12 +149,10 @@ var trainState = {
                 game.time.events.add(Phaser.Timer.SECOND * 2, function() {
                     this.sound.music.stop();
                     nextState('larzac', [
-                        '02t1', 'transition',
-                        '02t2', '',
-                        '02t3', '',
-                        '02t4', '',
-                        '02t5', ''
-                    ]);
+                        { img : '02t1', music : 'transition', text : "Roulant fièrement sur ses rails\n      Bringuebalant ses passagers,\nIl s'éloigne de son bercail\n      Et roule sans jamais s'arrêter." },
+                        { img : '02t2' },
+                        { img : '02t3' }
+                    ], { img : '02t4', text : '~ Chapitre 2 ~\n      La Ferme' });
                 }, this);
             }
         };

@@ -150,9 +150,8 @@ var larzacState = {
                 this.currentStep = -1;
                 game.time.events.add(Phaser.Timer.SECOND * 2, function() {
                     nextState('pigs', [
-                        '03t1', 'transition',
-                        '03t2', 'transition'
-                    ]);
+                        { img : '03t1', music : 'transition', text : "Après l'entrée dans la demeure\n      Suite à une exclamation,\nIls ressortirent dans l'heure\n     Pour compter les cochons..." },
+                    ], { img : '03t2', text : '~ Chapitre 3 ~\n      Comptage de Cochons' });
                 }, this);
             }
         }

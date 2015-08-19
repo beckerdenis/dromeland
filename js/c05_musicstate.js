@@ -1,4 +1,4 @@
-var bikeState = {
+var musicState = {
 
     // graphics
 
@@ -29,11 +29,9 @@ var bikeState = {
         }
         return car;
     },
-    
-//nextState('pirate', [
-//    { img : '06t1', text : "Holà, du bateau !\n      Que voyez-vous à l'horizon ?\nVous dites ? Une île ? Là-bas dans l'eau ?\n      Mais voyons, toutes les îles le sont !" }
-//], { img : '06t2', text : '~ Chapitre 6 ~\n      Pirates !' });
 
+//nextState('bike', [], { img : '05t1', text : '~ Chapitre 5 ~\n      A bicyclette' });
+    
     // phaser API implementation
 
     create : function() {
