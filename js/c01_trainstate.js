@@ -174,8 +174,7 @@ var trainState = {
         game.time.events.add(this.randomTime(0, 2), this.popTrain, this, 2, this.randomDirection(), random(200, 400));
 
         // graphics (to draw things directly, e.g. message bubbles)
-        this.windowGraphics = game.add.graphics(0, 0);
-        this.missionWindow = createWindow(this.windowGraphics, 0, 0, GAME_WIDTH, 64);
+        this.missionWindow = createWindow(game.add.graphics(0, 0), 0, 0, GAME_WIDTH, 64);
         this.missionWindow.setText("Allez rejoindre votre train ! (flèches pour se déplacer)");
         this.bubbleGraphics = game.add.graphics(0, 0);
         messageBubble(this.bubbleGraphics, 434, 156, 'Bonjour à tous !');

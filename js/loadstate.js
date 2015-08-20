@@ -52,6 +52,11 @@ var loadState = {
         game.load.image('c04_background', 'img/c04_background.png');
         game.load.image('c04_chrono', 'img/c04_chrono.png');
         game.load.spritesheet('c04_pig', 'img/c04_pig.png', 64, 64, 12);
+        // Niveau 5 : musique
+        game.load.image('c05_background', 'img/c05_background.png');
+        game.load.image('c05_gkey', 'img/c05_gkey.png');
+        game.load.image('c05_ok', 'img/c05_ok.png');
+        game.load.json('tetris', 'js/tetris.json');
         // Niveau 6 : route
         game.load.image('c06_background', 'img/c06_background.png');
         game.load.image('c06_car1', 'img/c06_car1.png');
@@ -72,16 +77,20 @@ var loadState = {
         game.load.image('c08_g', 'img/c08_g.png');
         game.load.spritesheet('c08_bubble', 'img/c08_bubble.png', 64, 64, 12);
         game.load.audio('c08_photo', 'audio/c08_photo.ogg');
+        
+        for (var i = 40; i < 80; i++) {
+            T.soundfont.play(i, false);
+        }
     },
 
     create : function() {
-        //game.state.start('music');
-        nextState('train', [
+        game.state.start('music');
+        /*nextState('train', [
             { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
             { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis par un objet enchanté." },
             { img : '01t3', music : 'intro3' },
             { img : '01t4' },
-        ], { img : '01t5', text : '~ Chapitre 1 ~\n      La Gare' });
+        ], { img : '01t5', text : '~ Chapitre 1 ~\n      La Gare' });*/
     }
 
 };

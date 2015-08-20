@@ -1,137 +1,138 @@
 var musicState = {
 
-    // graphics
-
-    playerSpeed : 200,
-
-    levelHeight : 20000,
-
-    cameraOffset : 0,
-
-    playerLife : 100,
-
-    // utilities
-
-    createCar : function(direction) {
-        var x = 320 + direction * 128 + random(0, 20) - random(0, 20);
-        var y = this.player.y - 40 + direction * 480;
-        var car = this.carGroup.create(x, y, 'c06_car' + random(1, 2));
-        car.anchor = { x : 0.5, y : 0.5 };
-        car.scale.y *= -direction;
-        game.physics.arcade.enable(car);
-        car.body.velocity.y = -direction * (450 + random(0, 150));
-        car.body.immovable = true;
-        car.direction = direction;
-        if (direction == -1) {
-            game.time.events.add(Phaser.Timer.HALF * random(2, 4), this.createCar, this, direction);
-        } else {
-            game.time.events.add(Phaser.Timer.HALF * random(4, 8), this.createCar, this, direction);
-        }
-        return car;
-    },
-
+    // constants
+    
+    VOICE_DISTANCE_PX : 180,
+    
+    VOICE_HEIGHT_PX : 120,
+    
+    VOICE_INIT_Y : 140,
+    
+    KEYS : [
+        [Phaser.Keyboard.I, Phaser.Keyboard.O, Phaser.Keyboard.P, Phaser.Keyboard.K, Phaser.Keyboard.L, Phaser.Keyboard.M],
+        [Phaser.Keyboard.G, Phaser.Keyboard.B, Phaser.Keyboard.D, Phaser.Keyboard.B]
+    ],
+    
+    // scenario
+    
+    timeCount : 0,
+    
+    voice : [],
+    
+    voiceNotes : [],
+    
+    noteOkZone : [],
+    
+    noteKillZone : [],
+    
+    notes : [],
+    
+    leftHandCount : 0,
+    
 //nextState('bike', [], { img : '05t1', text : '~ Chapitre 5 ~\n      A bicyclette' });
+    
+    // utilities
+    
+    createPortees : function(nb) {
+        for (var i = 0; i < nb; i++) {
+            gfx = game.add.graphics(0, this.VOICE_INIT_Y + i * this.VOICE_DISTANCE_PX);
+            gfx.beginFill(0xffffff, 0.8);
+            gfx.drawRect(0, 0, GAME_WIDTH, this.VOICE_HEIGHT_PX)
+            gfx.endFill();
+            this.notes[i] = game.add.group();
+            this.noteKillZone[i] = game.add.sprite(20, this.VOICE_INIT_Y + 1 + i * this.VOICE_DISTANCE_PX, 'c05_gkey');
+            this.noteOkZone[i] = game.add.sprite(160, this.VOICE_INIT_Y + this.VOICE_HEIGHT_PX / 2 + i * this.VOICE_DISTANCE_PX, 'c05_ok');
+            this.noteOkZone[i].anchor = { x : 0.5, y : 0.5 };
+            game.physics.arcade.enable(this.noteKillZone[i]);
+            game.physics.arcade.enable(this.noteOkZone[i]);
+            this.noteKillZone[i].body.immovable = true;
+            this.noteOkZone[i].body.immovable = true;
+        }
+    },
+    
+    popNote : function(voiceIndex, note) {
+        var x = GAME_WIDTH;
+        var y = this.VOICE_INIT_Y + this.VOICE_HEIGHT_PX / 2 + voiceIndex * this.VOICE_DISTANCE_PX;
+        
+        if (voiceIndex == 1) {
+            var keyCode = this.KEYS[1][this.leftHandCount];
+            this.leftHandCount = (this.leftHandCount + 1) % this.KEYS[1].length;
+        } else {
+            var keyCode = this.KEYS[0][note.note % this.KEYS[0].length];
+        }
+        var key = game.add.text(x, y + 4, String.fromCharCode(keyCode).toUpperCase(), { font : "24px Arial", fill : "black", align : "center" }, this.notes[voiceIndex]);
+        key.anchor = { x : 0.5, y : 0.5 };
+        game.physics.arcade.enable(key);
+        key.body.velocity.x = -80;
+        
+        key.noteValue = note.high * 12 + note.note;
+        key.phaserKey = keyCode;
+    },
     
     // phaser API implementation
 
     create : function() {
-        game.world.setBounds(0, 0, GAME_WIDTH, this.levelHeight);
-        this.road = game.add.tileSprite(0, 0, GAME_WIDTH, this.levelHeight, 'c06_background');
+        var music = game.cache.getJSON('tetris');
+        for (var i = 0; i < music.voices.length; i++) {
+            this.voice[i] = {
+                index : 0,
+                nextTimeTrigger : 0,
+                over : false
+            };
+        }
+        
+        game.add.image(0, 0, 'c05_background');
         
         game.physics.startSystem(Phaser.Physics.ARCADE);
         
-        // car
-        this.carGroup = game.add.group();
-
-        // player
-        this.player = game.add.sprite(GAME_WIDTH / 2, this.levelHeight, 'c06_player');
-        this.player.animations.add('move', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('moveFast', [0, 1, 2, 3], 15, true);
-        this.player.animations.add('moveSlow', [0, 1, 2, 3], 5, true);
-        this.player.anchor = {x : 0.5, y : 1};
-        game.physics.arcade.enable(this.player);
-        this.player.body.collideWorldBounds = true;
-        this.player.body.setSize(26, 28, 0, -4);
-
-        // car killer
-        this.killerGroup = game.add.group();
-        this.downKill = this.killerGroup.create(0, this.player.y + 800, null);
-        game.physics.arcade.enable(this.downKill);
-        this.downKill.body.immovable = true;
-        this.downKill.body.setSize(GAME_WIDTH, 4);
-        this.topKill = this.killerGroup.create(0, this.player.y - 800, null);
-        game.physics.arcade.enable(this.topKill);
-        this.topKill.body.immovable = true;
-        this.topKill.body.setSize(GAME_WIDTH, 4);
-
-        // audio
-        this.sound.boing = game.add.audio('c03_boing');
-        this.sound.groink = game.add.audio('c03_groink');
-        this.sound.success = game.add.audio('success');
-
-        // life
-        this.life = createJauge(game.add.graphics(0, 0), (GAME_WIDTH - 600) / 2, 440, 600, 32, this.playerLife, "Vie", 0xee5544);
-        this.life.setFill(this.playerLife);
+        this.createPortees(2);
         
-        this.createCar(-1);
-        this.createCar(1);
-
-        this.cursors = game.input.keyboard.createCursorKeys();
+        this.missionWindow = createWindow(game.add.graphics(0, 0), 0, 0, GAME_WIDTH, 64);
+        this.missionWindow.setText("Appuyez sur les bonnes touches quand elles sont\ndans le rectangle !");
+        
+        var starRank = music.voices[0].length + music.voices[1].length;
+        this.star = createJauge(game.add.graphics(0, 0), (GAME_WIDTH - 600) / 2, 72, 600, 32, starRank, "Jauge de Star", 0xdddd00);
+        
+        var musicTick = function() {
+            var allOver = true;
+            for (var i = 0; i < music.voices.length; i++) {
+                if (this.timeCount == this.voice[i].nextTimeTrigger && !this.voice[i].over) {
+                    var note = music.voices[i][this.voice[i].index];
+                    if (note == undefined) {
+                        this.voice[i].over = true;
+                        continue;
+                    }
+                    if (note.note != -1) {
+                        this.popNote(i, note);
+                    }
+                    this.voice[i].nextTimeTrigger += note.duration;
+                    this.voice[i].index++;
+                }
+                allOver = allOver && this.voice[i].over;
+            }
+            this.timeCount++;
+            if (!allOver) {
+                game.time.events.add(Phaser.Timer.QUARTER, musicTick, this);
+            }
+        };
+        game.time.events.add(Phaser.Timer.QUARTER, musicTick, this);
     },
 
     update : function() {
-        this.road.tilePosition.x = -1;
-        this.downKill.y = this.player.y + 700;
-        this.topKill.y = this.player.y - 800;
-
-        game.physics.arcade.collide(this.carGroup);
-        game.physics.arcade.collide(this.carGroup, this.player, function(car, player) {
-            if (this.playerLife > 0) {
-                this.playerLife--;
-            }
-            this.life.setFill(this.playerLife);
-        }, null, this);
-        game.physics.arcade.collide(this.carGroup, this.killerGroup, function(car) {
-            car.kill();
-        }, null, this);
-
-        // player movement
-        this.player.body.velocity.y = -this.playerSpeed;
-        if (this.cursors.up.isDown) {
-            this.player.body.velocity.y -= this.playerSpeed / 2;
+        for (var i = 0; i < this.notes.length; i++) {
+            game.physics.arcade.collide(this.noteKillZone[i], this.notes[i], function(kz, note) {
+                note.kill();
+            }, null, this);
+            this.noteOkZone[i].scale.setTo(1);
+            game.physics.arcade.overlap(this.noteOkZone[i], this.notes[i], function(oz, note) {
+                oz.scale.setTo(1.2);
+                if (game.input.keyboard.upDuration(note.phaserKey)) {
+                    T.soundfont.play(note.noteValue);
+                    this.star.setFill(this.star.fill + 1);
+                    note.kill();
+                }
+            }, null, this);
         }
-        if (this.cursors.down.isDown) {
-            this.player.body.velocity.y += this.playerSpeed / 2;
-        }
-        this.player.body.velocity.x = 0;
-        if (this.cursors.right.isDown) {
-            this.player.body.velocity.x += this.playerSpeed;
-        }
-        if (this.cursors.left.isDown) {
-            this.player.body.velocity.x -= this.playerSpeed;
-        }
-
-        // player animation & camera
-        if (this.player.body.velocity.y < -this.playerSpeed) {
-            this.player.animations.play('moveFast');
-            if (this.cameraOffset < 80) {
-                this.cameraOffset += 2;
-            }
-        } else if (this.player.body.velocity.y > -this.playerSpeed) {
-            this.player.animations.play('moveSlow');
-            if (this.cameraOffset > -80) {
-                this.cameraOffset -= 2;
-            }
-        } else {
-            this.player.animations.play('move');
-            if (this.cameraOffset > 0) {
-                this.cameraOffset -= 2;
-            } else if (this.cameraOffset < 0) {
-                this.cameraOffset += 2;
-            }
-        }
-        
-        game.camera.y = this.player.body.y - 300 + this.cameraOffset;
     }
 
 };

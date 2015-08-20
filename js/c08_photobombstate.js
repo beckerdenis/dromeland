@@ -51,7 +51,7 @@ var photobombState = {
         bubble.animations.add('disappearOK', [7, 6, 5, 4], 30, false);
         bubble.animations.add('disappearKO', [11, 10, 9, 8], 30, false);
         bubble.animations.play('appear');
-        var randomCharCode = 0;//random(0, 25);
+        var randomCharCode = random(0, 25);
         var randomChar = String.fromCharCode('A'.charCodeAt(0) + randomCharCode);
         var key = game.add.text(x, y + 4, randomChar, { font : "24px Arial", fill : "black", align : "center" });
         key.anchor = { x : 0.5, y : 0.5 };
