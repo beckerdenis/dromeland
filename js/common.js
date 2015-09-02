@@ -29,49 +29,90 @@ function loadPlayer(x, y, physics, group /* optional */) {
 function createWindow(g, x, y, w, h, backgroundColor /* optional */) {
     // g = graphics object
     g.fixedToCamera = true;
-    g.lineStyle(4, 0x000000, 0.9);
-    g.beginFill(backgroundColor || 0xddddff, 0.9);
-    g.drawRoundedRect(x, y, w, h, 8);
-    g.endFill();
-    return {
+    var frame = {
+
         graphx : g,
+        
         xCoord : x,
+        
         yCoord : y,
+        
         width : w,
+        
         height : h,
+        
+        color : backgroundColor || 0xddddff,
+
+        textString : null,
+        
+        setY : function(y) {
+            this.yCoord = y;
+            this.graphx.clear();
+            this.graphx.lineStyle(4, 0x000000, 0.9);
+            this.graphx.beginFill(this.color, 0.9);
+            this.graphx.drawRoundedRect(this.xCoord, this.yCoord, this.width, this.height, 8);
+            this.graphx.endFill();
+            this.setText(this.textString);
+        },
+
         setText : function(text) {
+            if (text == null) {
+                return;
+            }
+            this.textString = text;
             if (this.text != null) {
                 this.text.kill();
             }
+            this.graphx.visible = true;
             this.text = game.add.text(this.xCoord, this.yCoord + 4, text, { font: "18px Arial", fill: "black", align: 'center', boundsAlignH: "center", boundsAlignV: "middle" });
             this.text.setTextBounds(this.xCoord, this.yCoord, this.width, this.height);
             this.text.fixedToCamera = true;
         },
+        
+        hide : function() {
+            this.text.visible = false;
+            this.graphx.visible = false;
+        },
+        
         bringToTop : function() {
             game.world.bringToTop(this.graphx);
             game.world.bringToTop(this.text);
         }
+
     };
+    frame.setY(y);
+    return frame;
 }
 
 function createJauge(g, x, y, w, h, maxFill, text /* optional */, fillColor /* optional */) {
-    var localWindow = createWindow(g, x, y, w, h, 0xffffff);
-    var localGraphics = game.add.graphics(0, 0);
-    localGraphics.fixedToCamera = true;
-    if (text != undefined) {
-        localWindow.setText(text);
-    }
-    var fillColor = fillColor || 0xaa6611;
-    return {
-        graphics : localGraphics,
+    var jauge = {
+
+        frame : createWindow(g, x, y, w, h, 0xffffff),
+
+        graphics : game.add.graphics(0, 0),
+
         xCoord : x + 4,
+
         yCoord : y + 4,
+
         width : w - 8,
+
         height : h - 8,
+
         max : maxFill,
+
         fill : 0,
+
         backText : text,
-        color : fillColor,
+
+        color : fillColor || 0xaa6611,
+
+        setY : function(y) {
+            this.frame.setY(y);
+            this.yCoord = y + 4;
+            this.setFill(this.fill);
+        },
+
         setFill : function(fill) {
             if (fill > this.max) {
                 fill = this.max;
@@ -88,6 +129,11 @@ function createJauge(g, x, y, w, h, maxFill, text /* optional */, fillColor /* o
             this.fill = fill;
         }
     };
+    jauge.graphics.fixedToCamera = true;
+    if (text != undefined) {
+        jauge.frame.setText(text);
+    }
+    return jauge;
 }
 
 function clearMessageBubble(g) {

@@ -77,6 +77,23 @@ var loadState = {
         game.load.image('c08_g', 'img/c08_g.png');
         game.load.spritesheet('c08_bubble', 'img/c08_bubble.png', 64, 64, 12);
         game.load.audio('c08_photo', 'audio/c08_photo.ogg');
+        // Niveau 11 : terminator
+        game.load.image('c11_background', 'img/c11_background.png');
+        game.load.image('c11_background2', 'img/c11_background2.png');
+        game.load.spritesheet('c11_castle1', 'img/c11_castle_01.png', 104, 77);
+        game.load.spritesheet('c11_castle2', 'img/c11_castle_02.png', 133, 137);
+        game.load.spritesheet('c11_castle3', 'img/c11_castle_03.png', 160, 212);
+        game.load.spritesheet('c11_castle4', 'img/c11_castle_04.png', 287, 262);
+        game.load.spritesheet('c11_walking', 'img/c11_intro_walking.png', 150, 300);
+        game.load.spritesheet('c11_sit_talking', 'img/c11_sit_talking.png', 108, 175);
+        game.load.spritesheet('c11_sit_playing', 'img/c11_sit_playing.png', 141, 175);
+        game.load.spritesheet('c11_stand1', 'img/c11_stand_01.png', 363, 350);
+        game.load.spritesheet('c11_walk1', 'img/c11_walk_01.png', 363, 350);
+        game.load.spritesheet('c11_stand2', 'img/c11_stand_02.png', 363, 350);
+        game.load.spritesheet('c11_walk2', 'img/c11_walk_02.png', 363, 350);
+        game.load.spritesheet('c11_stand3', 'img/c11_stand_03.png', 363, 350);
+        game.load.spritesheet('c11_walk3', 'img/c11_walk_03.png', 363, 350);
+        game.load.audio('c11_ding', 'audio/c11_ding.ogg');
         
         for (var i = 40; i < 80; i++) {
             T.soundfont.play(i, false);
@@ -84,10 +101,10 @@ var loadState = {
     },
 
     create : function() {
-        game.state.start('music');
+        game.state.start('terminator');
         /*nextState('train', [
             { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
-            { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis par un objet enchanté." },
+            { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis d'un objet enchanté." },
             { img : '01t3', music : 'intro3' },
             { img : '01t4' },
         ], { img : '01t5', text : '~ Chapitre 1 ~\n      La Gare' });*/
