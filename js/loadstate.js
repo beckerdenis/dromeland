@@ -87,13 +87,13 @@ var loadState = {
         game.load.spritesheet('c11_walking', 'img/c11_intro_walking.png', 150, 300);
         game.load.spritesheet('c11_sit_talking', 'img/c11_sit_talking.png', 108, 175);
         game.load.spritesheet('c11_sit_playing', 'img/c11_sit_playing.png', 141, 175);
-        game.load.spritesheet('c11_stand1', 'img/c11_stand_01.png', 363, 350);
-        game.load.spritesheet('c11_walk1', 'img/c11_walk_01.png', 363, 350);
-        game.load.spritesheet('c11_stand2', 'img/c11_stand_02.png', 363, 350);
-        game.load.spritesheet('c11_walk2', 'img/c11_walk_02.png', 363, 350);
-        game.load.spritesheet('c11_stand3', 'img/c11_stand_03.png', 363, 350);
-        game.load.spritesheet('c11_walk3', 'img/c11_walk_03.png', 363, 350);
+        game.load.spritesheet('c11_stage1', 'img/c11_stage_01.png', 363, 350);
+        game.load.spritesheet('c11_stage2', 'img/c11_stage_02.png', 363, 350);
+        game.load.spritesheet('c11_stage3', 'img/c11_stage_03.png', 363, 350);
         game.load.audio('c11_ding', 'audio/c11_ding.ogg');
+        game.load.audio('c11_alarm', 'audio/c11_alarm.ogg');
+        game.load.audio('c11_bug', 'audio/c11_bug.ogg');
+        game.load.audio('c11_robot', 'audio/c11_robot.ogg');
         
         for (var i = 40; i < 80; i++) {
             T.soundfont.play(i, false);
