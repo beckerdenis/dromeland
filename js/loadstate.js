@@ -2,7 +2,7 @@ var loadState = {
 
     preload : function() {
         game.add.text(80, 150, 'Chargement en cours...',{ font : '30px serif', fill : '#ffffff' });
-        game.load.spritesheet('player', 'img/player.png', 64, 64, 16);
+        game.load.spritesheet('player', 'img/player.png', 64, 64, 20);
         game.load.audio('success', 'audio/success.ogg');
         game.load.audio('failure', 'audio/failure.ogg');
         game.load.audio('transition', 'audio/transition.ogg');
@@ -33,7 +33,6 @@ var loadState = {
         game.load.image('c01_background_part2', 'img/c01_background_part2.png');
         game.load.image('c01_bench', 'img/c01_bench.png');
         game.load.image('c01_post', 'img/c01_post.png');
-        game.load.image('c01_transition', 'img/c01_transition.png');
         game.load.spritesheet('c01_train', 'img/c01_train.png', 370, 124, 6);
         game.load.spritesheet('c01_tickets', 'img/c01_tickets.png', 30, 23);
         game.load.spritesheet('c01_chef_de_gare', 'img/c01_chef_de_gare.png', 27, 32);
@@ -64,6 +63,12 @@ var loadState = {
         game.load.image('c06_meme', 'img/c06_meme.png');
         game.load.spritesheet('c06_goat', 'img/c06_goat.png', 101, 96);
         game.load.spritesheet('c06_player', 'img/c06_player.png', 64, 64);
+        // Niveau 7 : ile aux pirates
+        game.load.image('c07_background', 'img/c07_background.png');
+        game.load.image('c07_floor', 'img/c07_floor.png');
+        game.load.image('c07_platform', 'img/c07_platform.png');
+        game.load.spritesheet('c07_croco', 'img/c07_croco.png', 48, 88);
+        game.load.audio('c07_gameover', 'audio/c07_gameover.ogg');
         // Niveau 8 : photobomb
         game.load.image('c08_background', 'img/c08_background.png');
         game.load.image('c08_maries', 'img/c08_maries.png');
@@ -101,7 +106,7 @@ var loadState = {
     },
 
     create : function() {
-        game.state.start('terminator');
+        game.state.start('pirate');
         /*nextState('train', [
             { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
             { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis d'un objet enchanté." },
