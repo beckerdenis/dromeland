@@ -69,6 +69,8 @@ var loadState = {
         game.load.image('c07_platform', 'img/c07_platform.png');
         game.load.spritesheet('c07_croco', 'img/c07_croco.png', 48, 88);
         game.load.audio('c07_gameover', 'audio/c07_gameover.ogg');
+        game.load.audio('c07_clear', 'audio/c07_clear.ogg');
+        game.load.audio('c07_music', 'audio/c07_music.ogg');
         // Niveau 8 : photobomb
         game.load.image('c08_background', 'img/c08_background.png');
         game.load.image('c08_maries', 'img/c08_maries.png');
