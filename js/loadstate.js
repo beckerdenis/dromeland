@@ -28,6 +28,10 @@ var loadState = {
         game.load.image('04t1', 'img/transitions/c05_t_01.png');
         
         game.load.image('05t1', 'img/transitions/c06_t_01.png');
+        
+        game.load.image('08t1', 'img/transitions/c08_t_01.png');
+        game.load.image('08t2', 'img/transitions/c08_t_02.png');
+        game.load.image('08t3', 'img/transitions/c08_t_03.png');
         // Niveau 1 : la gare
         game.load.image('c01_background_part1', 'img/c01_background_part1.png');
         game.load.image('c01_background_part2', 'img/c01_background_part2.png');
@@ -68,6 +72,7 @@ var loadState = {
         game.load.image('c07_floor', 'img/c07_floor.png');
         game.load.image('c07_platform', 'img/c07_platform.png');
         game.load.spritesheet('c07_croco', 'img/c07_croco.png', 48, 88);
+        game.load.spritesheet('c07_sealion', 'img/c07_sealion.png', 135, 95);
         game.load.audio('c07_gameover', 'audio/c07_gameover.ogg');
         game.load.audio('c07_clear', 'audio/c07_clear.ogg');
         game.load.audio('c07_music', 'audio/c07_music.ogg');
@@ -109,12 +114,12 @@ var loadState = {
 
     create : function() {
         game.state.start('pirate');
-        /*nextState('train', [
-            { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
-            { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis d'un objet enchanté." },
-            { img : '01t3', music : 'intro3' },
-            { img : '01t4' },
-        ], { img : '01t5', text : '~ Chapitre 1 ~\n      La Gare' });*/
+        //nextState('train', [
+        //    { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
+        //    { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis d'un objet enchanté." },
+        //    { img : '01t3', music : 'intro3' },
+        //    { img : '01t4' },
+        //], { img : '01t5', text : '~ Chapitre 1 ~\n      La Gare' });
     }
 
 };

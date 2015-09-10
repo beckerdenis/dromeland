@@ -8,6 +8,8 @@ var pirateState = {
 
     deadAnim : false,
 
+    finish : false,
+
     // utilities
     
     startDeadAnim : function() {
@@ -90,10 +92,8 @@ var pirateState = {
         this.vp2 = this.movingPlatform(this.createPlatform(this.platforms, 3060, 356, 80, 24, 'c07_platform', true), true);
         this.createPlatform(this.platforms, 3280, 380, 80, 100, 'c07_floor', true);
         this.createPlatform(this.fallingPlatforms, 3360, 356, 80, 24, 'c07_platform', false);
-        this.createPlatform(this.fallingPlatforms, 3440, 256, 80, 24, 'c07_platform', false);
-        this.createPlatform(this.fallingPlatforms, 3520, 156, 80, 24, 'c07_platform', false);
-        this.createPlatform(this.fallingPlatforms, 3600, 256, 80, 24, 'c07_platform', false);
-        this.createPlatform(this.fallingPlatforms, 3680, 356, 80, 24, 'c07_platform', false);
+        this.createPlatform(this.fallingPlatforms, 3460, 256, 80, 24, 'c07_platform', false);
+        this.createPlatform(this.fallingPlatforms, 3560, 156, 80, 24, 'c07_platform', false);
         this.createPlatform(this.platforms, 3760, 380, 80, 100, 'c07_floor', true);
         
         // enemies
@@ -128,6 +128,12 @@ var pirateState = {
         this.createKro(this.enemies, 3560);
         this.createKro(this.enemies, 3610);
         this.createKro(this.enemies, 3660);
+
+        // sea lion
+        var sealion = game.add.sprite(2040, 300, 'c07_sealion');
+        sealion.animations.add('move', [0, 1], 2, true);
+        sealion.animations.play('move');
+        sealion.scale.setTo(0.5, 0.5);
 
         // player
         this.player = loadPlayer(20, 200, game.physics.arcade);
@@ -214,19 +220,24 @@ var pirateState = {
 
         // player movement
         this.player.body.velocity.x = 0;
-        if (!this.deadAnim) {
+        if (!this.deadAnim && !this.finish) {
             if (this.cursors.right.isDown) {
                 this.player.body.velocity.x += this.playerSpeed;
             }
             if (this.cursors.left.isDown) {
                 this.player.body.velocity.x -= this.playerSpeed;
             }
-        }
-
-        if (this.player.x > this.levelWidth - this.player.width) {
+        }6
+        if (!this.finish && this.player.x > this.levelWidth - this.player.width) {
             this.sound.music.stop();
+            this.sound.clear.onStop.add(function() {
+                nextState('photobomb', [
+                    { img : '08t1', music : 'transition', text : "Fiers compagnons, le trésor nous avons,\n    Maintenant, à la ville revenons !" },
+                    { img : '08t2' }
+                ], { img : '08t3', text : '~ Chapitre 7 ~\n      Photobomb !' });
+            }, this);
             this.sound.clear.play();
-            this.deadAnim = true;
+            this.finish = true;
         }
 
         // player animation

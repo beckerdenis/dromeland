@@ -41,7 +41,7 @@ var transitionState = {
                 var scene = this.chapter;
                 scene.music = 'transition';
                 scene.musicLoop = false;
-                scene.textStyle = { font: 'bold 80px PinyonScript', fill: 'black', stroke: 'white', strokeThickness: 16, align: 'center', boundsAlignH: 'center', boundsAlignV: 'middle' };
+                scene.textStyle = { font: 'bold 60px PinyonScript', fill: 'black', stroke: 'white', strokeThickness: 16, align: 'center', boundsAlignH: 'center', boundsAlignV: 'middle' };
             } else {
                 var scene = this.scenario[this.count];
                 scene.musicLoop = true;
