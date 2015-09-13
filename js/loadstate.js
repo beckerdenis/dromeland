@@ -29,6 +29,9 @@ var loadState = {
         
         game.load.image('05t1', 'img/transitions/c06_t_01.png');
         
+        game.load.image('06t1', 'img/transitions/c07_t_01.png');
+        game.load.image('06t2', 'img/transitions/c07_t_02.png');
+
         game.load.image('08t1', 'img/transitions/c08_t_01.png');
         game.load.image('08t2', 'img/transitions/c08_t_02.png');
         game.load.image('08t3', 'img/transitions/c08_t_03.png');
@@ -106,6 +109,10 @@ var loadState = {
         game.load.audio('c11_alarm', 'audio/c11_alarm.ogg');
         game.load.audio('c11_bug', 'audio/c11_bug.ogg');
         game.load.audio('c11_robot', 'audio/c11_robot.ogg');
+        game.load.audio('c11_music1', 'audio/c11_music1.ogg');
+        game.load.audio('c11_music2', 'audio/c11_music2.ogg');
+        game.load.audio('c11_music3', 'audio/c11_music3.ogg');
+        game.load.audio('c11_music4', 'audio/c11_music4.ogg');
         
         for (var i = 40; i < 80; i++) {
             T.soundfont.play(i, false);
@@ -113,7 +120,7 @@ var loadState = {
     },
 
     create : function() {
-        game.state.start('pirate');
+        game.state.start('bike');
         //nextState('train', [
         //    { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
         //    { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis d'un objet enchanté." },

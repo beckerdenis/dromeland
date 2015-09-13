@@ -201,6 +201,13 @@ var terminatorState = {
         this.sound.alarm = game.add.audio('c11_alarm');
         this.sound.bug = game.add.audio('c11_bug');
         this.sound.robot = game.add.audio('c11_robot');
+        this.sound.music1 = game.add.audio('c11_music1');
+        game.sound.setDecodedCallback(this.sound.music1, function() {
+            this.sound.music1.loopFull();
+        }, this);
+        this.sound.music2 = game.add.audio('c11_music2');
+        this.sound.music3 = game.add.audio('c11_music3');
+        this.sound.music4 = game.add.audio('c11_music4');
 
         this.cursors = game.input.keyboard.createCursorKeys();
     },
@@ -282,9 +289,11 @@ var terminatorState = {
                                     this.stateId = this.waitClick(S_DIALOG, function() {
 
                                         this.child.animations.stop();
+                                        this.sound.music1.stop();
                                         messageBubble(this.bubbleGraphics, this.child.x, this.child.y - this.child.height, "Pourquoi les enfants\nils sont contents ?", "left");
                                         this.stateId = this.waitClick(S_CHILD_ANGRY_1, function() {
 
+                                            this.sound.music2.loopFull();
                                             this.loadChildAngrySprite(1);
                                             this.cursor.visible = true;
                                             this.pause = false;
@@ -321,9 +330,11 @@ var terminatorState = {
                     this.missionWindow.setText("Un nouveau type de château a été débolqué !");
                     this.stateId = this.waitClick(S_DIALOG, function() {
                         this.availableCastles.push(3);
+                        this.sound.music2.stop();
                         messageBubble(this.bubbleGraphics, this.child.x, this.child.y - this.child.height / 2, "Je suis un enfant, tu ne\npeux rien contre moi !", 'right');
                         this.stateId = this.waitClick(S_CHILD_ANGRY_2, function() {
                             this.loadChildAngrySprite(2);
+                            this.sound.music3.loopFull();
                             this.cursor.visible = true;
                             this.pause = false;
                             this.stress = 7;
@@ -359,6 +370,7 @@ var terminatorState = {
                     this.missionWindow.setText("Un nouveau type de château a été débloqué !");
                     this.stateId = this.waitClick(S_DIALOG, function() {
                         this.availableCastles.push(4);
+                        this.sound.music3.stop();
                         messageBubble(this.bubbleGraphics, this.child.x, this.child.y - this.child.height / 2, "Il est fini le château ?", 'left');
                         this.stateId = this.waitClick(S_CHILD_ANGRY_3, function() {
                             this.sound.bug.play();
@@ -375,6 +387,7 @@ var terminatorState = {
                             this.child.body.velocity.x = this.childXvelocity * (2 * random(0, 1) - 1);
                             game.time.events.add(Phaser.Timer.HALF, this.childDecision, this);
                             this.sound.robot.play();
+                            this.sound.music4.loopFull();
                         });
                     });
                 }

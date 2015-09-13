@@ -213,6 +213,10 @@ var trainState = {
             game.physics.arcade.collide(this.trainArray[i], this.player, function(train, player) {
                 this.sound.play('c01_shock');
                 player.kill();
+                missionWindow.setText("Perdu ! Le niveau va recommencer.");
+                game.time.events.add(Phaser.Timer.SECOND * 2, function() {
+                    game.state.restart();
+                }, this);
             }, null, this);
             game.physics.arcade.overlap(this.trainArray[i], this.trainKillers, function(train) {
                 game.time.events.add(this.randomTime(2, 6), this.popTrain, this, train.lineId, this.randomDirection(), random(200, 400));

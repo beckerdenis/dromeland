@@ -123,7 +123,7 @@ function createJauge(g, x, y, w, h, maxFill, text /* optional */, fillColor /* o
                 this.graphics.beginFill(this.color, 0.9);
                 var bw = Math.round(fill * this.width / this.max);
                 bw = (bw < 20 ? 20 : bw); // solve phaser bug
-                this.graphics.drawRoundedRect(this.xCoord, this.yCoord, bw, this.height, 8);
+                this.graphics.drawRoundedRect(this.xCoord, this.yCoord, bw, this.height, 4);
                 this.graphics.endFill();
             }
             this.fill = fill;
