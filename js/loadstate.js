@@ -135,7 +135,7 @@ var loadState = {
     },
 
     create : function() {
-        game.state.start('pandemie');
+        game.state.start('music');
         //nextState('train', [
         //    { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
         //    { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis d'un objet enchanté." },

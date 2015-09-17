@@ -29,8 +29,8 @@ var musicState = {
     
     leftHandCount : 0,
     
-//nextState('bike', [], { img : '05t1', text : '~ Chapitre 5 ~\n      A bicyclette' });
-    
+    noteCount : 0,
+
     // utilities
     
     createPortees : function(nb) {
@@ -54,6 +54,7 @@ var musicState = {
         var x = GAME_WIDTH;
         var y = this.VOICE_INIT_Y + this.VOICE_HEIGHT_PX / 2 + voiceIndex * this.VOICE_DISTANCE_PX;
         
+        this.noteCount++;
         if (voiceIndex == 1) {
             var keyCode = this.KEYS[1][this.leftHandCount];
             this.leftHandCount = (this.leftHandCount + 1) % this.KEYS[1].length;
@@ -122,6 +123,10 @@ var musicState = {
         for (var i = 0; i < this.notes.length; i++) {
             game.physics.arcade.collide(this.noteKillZone[i], this.notes[i], function(kz, note) {
                 note.kill();
+                this.noteCount--;
+                if (this.noteCount == 0) {
+                    nextState('bike', [], { img : '05t1', text : '~ Chapitre 5 ~\n      A bicyclette' });
+                }
             }, null, this);
             this.noteOkZone[i].scale.setTo(1);
             game.physics.arcade.overlap(this.noteOkZone[i], this.notes[i], function(oz, note) {
@@ -130,6 +135,10 @@ var musicState = {
                     T.soundfont.play(note.noteValue);
                     this.star.setFill(this.star.fill + 1);
                     note.kill();
+                    this.noteCount--;
+                    if (this.noteCount == 0) {
+                        nextState('bike', [], { img : '05t1', text : '~ Chapitre 5 ~\n      A bicyclette' });
+                    }
                 }
             }, null, this);
         }
