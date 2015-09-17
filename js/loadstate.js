@@ -35,6 +35,16 @@ var loadState = {
         game.load.image('08t1', 'img/transitions/c08_t_01.png');
         game.load.image('08t2', 'img/transitions/c08_t_02.png');
         game.load.image('08t3', 'img/transitions/c08_t_03.png');
+
+        game.load.image('09t1', 'img/transitions/c09_t_01.png');
+        game.load.image('09t2', 'img/transitions/c09_t_02.png');
+        game.load.image('09t3', 'img/transitions/c09_t_03.png');
+        game.load.image('09t4', 'img/transitions/c09_t_04.png');
+
+        game.load.image('10t1', 'img/transitions/c10_t_01.png');
+        game.load.image('10t2', 'img/transitions/c10_t_02.png');
+        game.load.image('10t3', 'img/transitions/c10_t_03.png');
+        game.load.image('10t4', 'img/transitions/c10_t_04.png');
         // Niveau 1 : la gare
         game.load.image('c01_background_part1', 'img/c01_background_part1.png');
         game.load.image('c01_background_part2', 'img/c01_background_part2.png');
@@ -92,6 +102,11 @@ var loadState = {
         game.load.image('c08_g', 'img/c08_g.png');
         game.load.spritesheet('c08_bubble', 'img/c08_bubble.png', 64, 64, 12);
         game.load.audio('c08_photo', 'audio/c08_photo.ogg');
+        // Niveau 9 : pandemie
+        game.load.image('c09_background', 'img/c09_background.png');
+        game.load.image('c09_city_card', 'img/c09_city_card.png');
+        game.load.image('c09_pandemic_card', 'img/c09_pandemic_card.png');
+        game.load.spritesheet('c09_blink_card', 'img/c09_blink_card.png', 96, 128);
         // Niveau 11 : terminator
         game.load.image('c11_background', 'img/c11_background.png');
         game.load.image('c11_background2', 'img/c11_background2.png');
@@ -120,7 +135,7 @@ var loadState = {
     },
 
     create : function() {
-        game.state.start('bike');
+        game.state.start('pandemie');
         //nextState('train', [
         //    { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
         //    { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis d'un objet enchanté." },

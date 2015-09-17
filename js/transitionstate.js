@@ -41,11 +41,11 @@ var transitionState = {
                 var scene = this.chapter;
                 scene.music = 'transition';
                 scene.musicLoop = false;
-                scene.textStyle = { font: 'bold 60px PinyonScript', fill: 'black', stroke: 'white', strokeThickness: 16, align: 'center', boundsAlignH: 'center', boundsAlignV: 'middle' };
+                scene.textStyle = { font: 'bold 50px PinyonScript', fill: 'black', stroke: 'white', strokeThickness: 8, align: 'center', boundsAlignH: 'center', boundsAlignV: 'middle' };
             } else {
                 var scene = this.scenario[this.count];
                 scene.musicLoop = true;
-                scene.textStyle = { font: 'bold 40px PinyonScript', fill: 'black', stroke: 'white', strokeThickness: 8, align: 'center', boundsAlignH: 'center', boundsAlignV: 'middle' };
+                scene.textStyle = { font: 'bold 32px PinyonScript', fill: 'black', stroke: 'white', strokeThickness: 4, align: 'center', boundsAlignH: 'center', boundsAlignV: 'middle' };
             }
             
             // music

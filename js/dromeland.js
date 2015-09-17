@@ -7,7 +7,7 @@ game.state.add('music', musicState);
 game.state.add('bike', bikeState);
 game.state.add('pirate', pirateState);
 game.state.add('photobomb', photobombState);
-//game.state.add('pandemie', pandemieState);
+game.state.add('pandemie', pandemieState);
 //game.state.add('lake', lakeState);
 game.state.add('terminator', terminatorState);
 //game.state.add('credits', creditsState);
