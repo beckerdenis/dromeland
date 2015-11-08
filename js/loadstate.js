@@ -45,6 +45,8 @@ var loadState = {
         game.load.image('10t2', 'img/transitions/c10_t_02.png');
         game.load.image('10t3', 'img/transitions/c10_t_03.png');
         game.load.image('10t4', 'img/transitions/c10_t_04.png');
+        
+        game.load.image('11t1', 'img/transitions/c11_t_01.png');
         // Niveau 1 : la gare
         game.load.image('c01_background_part1', 'img/c01_background_part1.png');
         game.load.image('c01_background_part2', 'img/c01_background_part2.png');
@@ -107,6 +109,12 @@ var loadState = {
         game.load.image('c09_city_card', 'img/c09_city_card.png');
         game.load.image('c09_pandemic_card', 'img/c09_pandemic_card.png');
         game.load.spritesheet('c09_blink_card', 'img/c09_blink_card.png', 96, 128);
+        // Niveau 10 : lac
+        game.load.image('c10_alibi', 'img/c10_alibi.png');
+        game.load.spritesheet('c10_animated_water', 'img/c10_animated_water.png', 256, 512);
+        game.load.spritesheet('c10_player', 'img/c10_player.png', 64, 96, 16);
+        game.load.spritesheet('c10_a', 'img/c10_character_a.png', 64, 96, 20);
+        game.load.spritesheet('c10_b', 'img/c10_character_b.png', 64, 96, 20);
         // Niveau 11 : terminator
         game.load.image('c11_background', 'img/c11_background.png');
         game.load.image('c11_background2', 'img/c11_background2.png');
@@ -135,13 +143,13 @@ var loadState = {
     },
 
     create : function() {
-        game.state.start('music');
-        //nextState('train', [
-        //    { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
-        //    { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis d'un objet enchanté." },
-        //    { img : '01t3', music : 'intro3' },
-        //    { img : '01t4' },
-        //], { img : '01t5', text : '~ Chapitre 1 ~\n      La Gare' });
+        game.state.start('titlescreen');
+        /*nextState('train', [
+            { img : '01t1', music : 'intro1', text : "Au fin fond d'une bourgade\n      Perdue dans les montagnes,\nSe prévoyait une escapade\n      Vers la profonde campagne." },
+            { img : '01t2', music : 'intro2', text : "Les gourgandins endormis\n      Furent alors soudain réveillés,\nPar un fort et vilain bruit\n      Emis d'un objet enchanté." },
+            { img : '01t3', music : 'intro3' },
+            { img : '01t4' },
+        ], { img : '01t5', text : '~ Chapitre 1 ~\n      La Gare' });*/
     }
 
 };

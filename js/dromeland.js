@@ -1,4 +1,5 @@
 game.state.add('load', loadState);
+game.state.add('titlescreen', titleScreenState);
 game.state.add('train', trainState);
 //game.state.add('bonusCar', bonusCarState);
 game.state.add('larzac', larzacState);
@@ -8,7 +9,7 @@ game.state.add('bike', bikeState);
 game.state.add('pirate', pirateState);
 game.state.add('photobomb', photobombState);
 game.state.add('pandemie', pandemieState);
-//game.state.add('lake', lakeState);
+game.state.add('lake', lakeState);
 game.state.add('terminator', terminatorState);
 //game.state.add('credits', creditsState);
 

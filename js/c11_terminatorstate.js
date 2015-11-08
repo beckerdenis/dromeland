@@ -26,7 +26,7 @@ var terminatorState = {
 
     // utilities
 
-    loadChildAngrySprite(stage) {
+    loadChildAngrySprite : function(stage) {
         var newchild = game.add.sprite(this.child.x, this.child.y, 'c11_stage' + stage);
         newchild.anchor = this.child.anchor;
         newchild.animations.add('stand', [0, 1], 4, true);
